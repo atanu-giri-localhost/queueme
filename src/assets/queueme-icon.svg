@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">QueueMe app icon</title>
+  <desc id="desc">Popcorn, a movie clapperboard, stacked books, and a play button on a dark navy rounded-square background.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#06132f"/><stop offset=".55" stop-color="#071d4d"/><stop offset="1" stop-color="#020a20"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#ff4960"/><stop offset=".5" stop-color="#ed1743"/><stop offset="1" stop-color="#a90d36"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#a65aff"/><stop offset=".48" stop-color="#7430f2"/><stop offset="1" stop-color="#4817b8"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#13e4ee"/><stop offset=".55" stop-color="#00b9d0"/><stop offset="1" stop-color="#08769d"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2=".8" y2="1">
+      <stop stop-color="#fff75a"/><stop offset=".55" stop-color="#ffd522"/><stop offset="1" stop-color="#ff980b"/>
+    </linearGradient>
+    <linearGradient id="white" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#fffef6"/><stop offset="1" stop-color="#e7e8f1"/>
+    </linearGradient>
+    <linearGradient id="clap" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#263b69"/><stop offset="1" stop-color="#08132f"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="7"/>
+      <feOffset dy="7"/><feComponentTransfer><feFuncA type="linear" slope=".4"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="iconClip"><rect x="8" y="8" width="496" height="496" rx="76"/></clipPath>
+  </defs>
+  <g clip-path="url(#iconClip)">
+    <rect width="512" height="512" fill="url(#bg)"/>
+    <ellipse cx="252" cy="468" rx="194" ry="19" fill="#000" opacity=".28"/>
+    <!-- popcorn kernels -->
+    <g filter="url(#shadow)" stroke="#ffe76c" stroke-width="2">
+      <circle cx="104" cy="145" r="28" fill="#fff6a6"/>
+      <circle cx="132" cy="119" r="30" fill="#fff36d"/>
+      <circle cx="166" cy="103" r="34" fill="#fff36c"/>
+      <circle cx="199" cy="116" r="28" fill="#fff9b4"/>
+      <circle cx="224" cy="142" r="29" fill="#ffe94d"/>
+      <circle cx="85" cy="172" r="25" fill="#ffe75a"/>
+      <circle cx="118" cy="170" r="30" fill="#fff8b4"/>
+      <circle cx="154" cy="157" r="30" fill="#fff06a"/>
+      <circle cx="190" cy="162" r="31" fill="#fff8ad"/>
+      <circle cx="220" cy="177" r="25" fill="#ffe64b"/>
+    </g>
+    <!-- tub rim and striped popcorn bucket -->
+    <path d="M62 176 Q62 163 79 162 L238 162 Q255 164 255 178 L241 292 Q239 307 222 309 L94 309 Q77 307 75 292Z" fill="url(#red)" stroke="#ffb5c1" stroke-width="3" filter="url(#shadow)"/>
+    <path d="M88 166 L119 166 L126 304 L99 304Z M151 165 L180 165 L177 306 L147 306Z M212 165 L235 166 L222 302 L198 304Z" fill="url(#white)"/>
+    <ellipse cx="158" cy="172" rx="100" ry="17" fill="#fffdf5" stroke="#ffd9dc" stroke-width="3"/>
+    <ellipse cx="158" cy="174" rx="83" ry="9" fill="#f9d5c8" opacity=".5"/>
+    <!-- clapperboard body -->
+    <g filter="url(#shadow)">
+      <path d="M240 226 L424 159 Q437 155 442 169 L450 192 L274 264Z" fill="url(#clap)" stroke="#395b9c" stroke-width="3"/>
+      <path d="M246 224 L282 211 L302 238 L266 252Z M315 199 L350 186 L370 213 L335 226Z M383 174 L417 162 L435 187 L400 200Z" fill="#f4f6ff"/>
+      <path d="M258 251 L443 204 L449 284 L266 307Z" fill="url(#clap)" stroke="#304d87" stroke-width="3"/>
+      <path d="M282 245 L315 237 L331 264 L298 273Z M351 227 L385 219 L400 246 L367 255Z" fill="#f5f5ff"/>
+      <circle cx="263" cy="251" r="8" fill="#8097d6" stroke="#182c5b" stroke-width="3"/>
+      <circle cx="275" cy="278" r="8" fill="#8097d6" stroke="#182c5b" stroke-width="3"/>
+      <circle cx="301" cy="271" r="8" fill="#8097d6" stroke="#182c5b" stroke-width="3"/>
+    </g>
+    <!-- lower teal book -->
+    <g filter="url(#shadow)">
+      <path d="M54 359 Q54 342 73 338 L291 338 Q304 338 307 352 L314 408 Q314 425 296 429 L78 440 Q58 440 56 422Z" fill="url(#teal)" stroke="#27e7f1" stroke-width="3"/>
+      <path d="M113 356 L282 353 Q294 353 295 365 L298 398 Q298 407 285 408 L114 416 Q100 416 99 403 L98 371Q99 358 113 356Z" fill="url(#white)"/>
+      <path d="M102 376 L296 370 M103 391 L297 385 M104 406 L297 400" stroke="#c9d7e3" stroke-width="3" opacity=".7"/>
+      <path d="M57 389 Q57 373 73 370 L98 368 L101 416 L59 421Z" fill="#00a7c4"/>
+    </g>
+    <!-- purple book -->
+    <g filter="url(#shadow)">
+      <path d="M65 285 Q66 270 84 267 L304 267 Q319 267 322 282 L329 333 Q330 349 312 353 L84 363 Q67 363 65 347Z" fill="url(#purple)" stroke="#bd87ff" stroke-width="3"/>
+      <path d="M119 281 L300 279 Q311 279 312 291 L316 324 Q317 333 304 334 L120 342 Q107 342 107 330 L106 295Q106 283 119 281Z" fill="url(#white)"/>
+      <path d="M108 301 L313 296 M109 316 L315 311 M110 331 L316 326" stroke="#d8dce8" stroke-width="3" opacity=".75"/>
+      <path d="M67 308 Q67 294 83 292 L106 291 L108 342 L69 347Z" fill="#6424d5"/>
+    </g>
+    <!-- play button -->
+    <g filter="url(#shadow)">
+      <circle cx="373" cy="371" r="78" fill="#f68b00"/>
+      <circle cx="373" cy="361" r="76" fill="url(#yellow)" stroke="#ffea65" stroke-width="4"/>
+      <path d="M354 324 Q350 320 350 332 L350 391 Q350 402 360 396 L405 369 Q414 363 405 357Z" fill="#071634" stroke="#1b2d58" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M312 316 Q322 302 337 302" fill="none" stroke="#fff8a8" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+    </g>
+    <rect x="8.5" y="8.5" width="495" height="495" rx="75.5" fill="none" stroke="#1c4eaa" stroke-width="2"/>
+  </g>
+</svg>
