@@ -1,4 +1,4 @@
-import { Film, PlayCircle, Newspaper, BookOpen, GraduationCap, Layers } from 'lucide-react';
+import { Film, PlayCircle, Newspaper, BookOpen, GraduationCap, Headphones, Layers } from 'lucide-react';
 
 export default function TypeIcon({ type, className = 'w-4 h-4', ...props }) {
   switch (type) {
@@ -12,6 +12,8 @@ export default function TypeIcon({ type, className = 'w-4 h-4', ...props }) {
       return <BookOpen className={className} {...props} />;
     case 'course':
       return <GraduationCap className={className} {...props} />;
+    case 'audio':
+      return <Headphones className={className} {...props} />;
     default:
       return <Layers className={className} {...props} />;
   }

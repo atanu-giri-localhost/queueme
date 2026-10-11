@@ -30,6 +30,7 @@ export default function FilterBar({
     { id: 'article', label: 'Articles' },
     { id: 'book', label: 'Books' },
     { id: 'course', label: 'Courses' },
+    { id: 'audio', label: 'Audio' },
   ];
 
   const statusList = [

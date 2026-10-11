@@ -5,7 +5,7 @@ export default function CategoryBreakdown({
   onSelectCategory,
   selectedCategory,
 }) {
-  const mediaTypes = ['movie', 'video', 'article', 'book', 'course'];
+  const mediaTypes = ['movie', 'video', 'article', 'book', 'course', 'audio'];
   const total = counts.total || 1;
 
   const typeConfig = {
@@ -14,6 +14,7 @@ export default function CategoryBreakdown({
     article: { label: 'Articles', color: 'bg-emerald-500', barColor: 'from-emerald-500 to-emerald-600', text: 'text-emerald-400' },
     book: { label: 'Books', color: 'bg-sky-500', barColor: 'from-sky-500 to-sky-600', text: 'text-sky-400' },
     course: { label: 'Courses', color: 'bg-violet-500', barColor: 'from-violet-500 to-violet-600', text: 'text-violet-400' },
+    audio: { label: 'Audio', color: 'bg-fuchsia-500', barColor: 'from-fuchsia-500 to-fuchsia-600', text: 'text-fuchsia-400' },
   };
 
   return (
@@ -23,7 +24,7 @@ export default function CategoryBreakdown({
           <h3 className="text-sm font-bold text-white tracking-tight">Queue Distribution</h3>
           <p className="text-xs text-zinc-400">Media split across your personal backlog</p>
         </div>
-        <span className="text-xs font-mono text-zinc-400">5 Categories</span>
+        <span className="text-xs font-mono text-zinc-400">6 Categories</span>
       </div>
 
       {/* Multi-segmented distribution bar */}
@@ -44,7 +45,7 @@ export default function CategoryBreakdown({
       </div>
 
       {/* Cards for each category */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
         {mediaTypes.map((type) => {
           const cfg = typeConfig[type];
           const count = counts[type] || 0;

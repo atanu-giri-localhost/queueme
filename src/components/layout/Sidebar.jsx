@@ -78,6 +78,7 @@ export default function Sidebar({
     { id: 'article', label: 'Articles', type: 'article', count: counts.article },
     { id: 'book', label: 'Books', type: 'book', count: counts.book },
     { id: 'course', label: 'Courses', type: 'course', count: counts.course },
+    { id: 'audio', label: 'Audio', type: 'audio', count: counts.audio },
   ];
 
   return (

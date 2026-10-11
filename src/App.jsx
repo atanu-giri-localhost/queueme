@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import {
   Sparkles,
   Plus,
@@ -6,7 +6,6 @@ import {
   FilterX,
   AlertTriangle,
   RotateCcw,
-  Inbox,
 } from 'lucide-react';
 
 import { useQueueStorage } from './hooks/useQueueStorage';
@@ -23,6 +22,7 @@ import ItemDetailModal from './components/items/ItemDetailModal';
 import AddItemModal from './components/items/AddItemModal';
 import ResetConfirmationModal from './components/common/ResetConfirmationModal';
 import Button from './components/common/Button';
+import KeyboardShortcutsOverlay from './components/common/KeyboardShortcutsOverlay';
 
 export default function App() {
   const {
@@ -37,6 +37,7 @@ export default function App() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
   // Filters & Search state
@@ -59,6 +60,7 @@ export default function App() {
       article: items.filter((i) => i.type === 'article').length,
       book: items.filter((i) => i.type === 'book').length,
       course: items.filter((i) => i.type === 'course').length,
+      audio: items.filter((i) => i.type === 'audio').length,
     };
   }, [items]);
 
@@ -218,6 +220,58 @@ export default function App() {
     setSelectedItem(null);
   };
 
+  // Global keyboard shortcuts — inactive when a text input / textarea is focused
+  const isTypingInField = useCallback(() => {
+    const tag = document.activeElement?.tagName;
+    const editable = document.activeElement?.isContentEditable;
+    return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || editable;
+  }, []);
+
+  useEffect(() => {
+    const handleGlobalKey = (e) => {
+      // Never fire when modals with their own Esc handlers are open
+      if (isTypingInField()) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      switch (e.key) {
+        case 'n':
+        case 'N':
+          e.preventDefault();
+          if (!selectedItem && !isAddModalOpen && !isResetModalOpen) {
+            setIsAddModalOpen(true);
+          }
+          break;
+        case '1':
+          e.preventDefault();
+          setCurrentView('dashboard');
+          break;
+        case '2':
+          e.preventDefault();
+          setCurrentView('queue');
+          break;
+        case 'g':
+        case 'G':
+          e.preventDefault();
+          setViewMode('grid');
+          break;
+        case 'l':
+        case 'L':
+          e.preventDefault();
+          setViewMode('list');
+          break;
+        case '?':
+          e.preventDefault();
+          setIsShortcutsOpen((prev) => !prev);
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKey);
+    return () => window.removeEventListener('keydown', handleGlobalKey);
+  }, [isTypingInField, selectedItem, isAddModalOpen, isResetModalOpen]);
+
   return (
     <div className="flex h-screen w-full bg-zinc-950 text-zinc-100 overflow-hidden font-sans">
       {/* Collapsible Desktop Sidebar */}
@@ -254,6 +308,7 @@ export default function App() {
         <Navbar
           onOpenMobileNav={() => setIsMobileNavOpen(true)}
           onOpenAddItem={() => setIsAddModalOpen(true)}
+          onOpenShortcuts={() => setIsShortcutsOpen(true)}
           searchQuery={searchQuery}
           setSearchQuery={(query) => {
             setSearchQuery(query);
@@ -552,6 +607,12 @@ export default function App() {
         onClose={() => setIsResetModalOpen(false)}
         onConfirm={resetToSampleData}
         isCorrupted={isCorrupted}
+      />
+
+      {/* Keyboard Shortcuts Help Overlay — press ? to open */}
+      <KeyboardShortcutsOverlay
+        isOpen={isShortcutsOpen}
+        onClose={() => setIsShortcutsOpen(false)}
       />
     </div>
   );

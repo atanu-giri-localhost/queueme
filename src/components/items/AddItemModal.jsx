@@ -7,6 +7,7 @@ import {
   Newspaper,
   BookOpen,
   GraduationCap,
+  Headphones,
 } from 'lucide-react';
 import Button from '../common/Button';
 
@@ -36,6 +37,11 @@ const TYPE_DEFAULTS = {
     placeholderPlatform: 'Coursera / Udemy',
     defaultCover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80',
   },
+  audio: {
+    placeholderDuration: '45 min',
+    placeholderPlatform: 'Spotify / Audible / Apple Podcasts',
+    defaultCover: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=800&q=80',
+  },
 };
 
 export default function AddItemModal({
@@ -50,6 +56,7 @@ export default function AddItemModal({
   const [duration, setDuration] = useState('');
   const [url, setUrl] = useState('');
   const [coverImage, setCoverImage] = useState('');
+  const [sourceUrl, setSourceUrl] = useState('');
   const [priority, setPriority] = useState('high');
   const [status, setStatus] = useState('queued');
   const [tagsInput, setTagsInput] = useState('');
@@ -103,6 +110,7 @@ export default function AddItemModal({
       duration: duration.trim() || TYPE_DEFAULTS[type].placeholderDuration,
       url: finalUrl,
       coverImage: finalCover || TYPE_DEFAULTS[type].defaultCover,
+      ...(type === 'audio' && { sourceUrl: sourceUrl.trim() ? (!/^https?:\/\//i.test(sourceUrl.trim()) ? `https://${sourceUrl.trim()}` : sourceUrl.trim()) : finalUrl }),
       priority,
       status,
       progress: status === 'in_progress' ? 10 : status === 'completed' ? 100 : 0,
@@ -123,6 +131,7 @@ export default function AddItemModal({
     setDuration('');
     setUrl('');
     setCoverImage('');
+    setSourceUrl('');
     setPriority('high');
     setStatus('queued');
     setTagsInput('');
@@ -136,6 +145,7 @@ export default function AddItemModal({
     { id: 'article', label: 'Article', icon: Newspaper, color: 'text-emerald-400' },
     { id: 'book', label: 'Book', icon: BookOpen, color: 'text-sky-400' },
     { id: 'course', label: 'Course', icon: GraduationCap, color: 'text-violet-400' },
+    { id: 'audio', label: 'Audio', icon: Headphones, color: 'text-fuchsia-400' },
   ];
 
   return (
@@ -162,7 +172,7 @@ export default function AddItemModal({
             </div>
             <div>
               <h2 id="add-modal-title" className="text-lg font-bold text-white tracking-tight">Add to Queue</h2>
-              <p className="text-xs text-zinc-400">Save a new movie, video, article, book, or course</p>
+              <p className="text-xs text-zinc-400">Save a new movie, video, article, book, course, or audio</p>
             </div>
           </div>
 
@@ -190,7 +200,7 @@ export default function AddItemModal({
             <span className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
               Media Type
             </span>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2" role="radiogroup" aria-label="Media Type">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2" role="radiogroup" aria-label="Media Type">
               {mediaTypes.map((t) => {
                 const Icon = t.icon;
                 const isSelected = type === t.id;
@@ -329,6 +339,24 @@ export default function AddItemModal({
               />
             </div>
           </div>
+
+          {/* Source URL — audio only */}
+          {type === 'audio' && (
+            <div>
+              <label htmlFor="add-item-source-url-input" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                Audio Stream URL <span className="text-fuchsia-400 text-[10px] font-normal">(Spotify / Audible / Podcast)</span>
+              </label>
+              <input
+                id="add-item-source-url-input"
+                type="text"
+                inputMode="url"
+                value={sourceUrl}
+                onChange={(e) => setSourceUrl(e.target.value)}
+                placeholder="https://open.spotify.com/... or https://audible.com/..."
+                className="w-full px-3.5 py-2.5 bg-zinc-900/90 focus:bg-zinc-900 text-zinc-100 placeholder-zinc-400 text-sm rounded-xl border border-zinc-800 focus:border-fuchsia-500 focus:outline-none focus:ring-1 focus:ring-fuchsia-500/40 transition-colors"
+              />
+            </div>
+          )}
 
           {/* URL */}
           <div>

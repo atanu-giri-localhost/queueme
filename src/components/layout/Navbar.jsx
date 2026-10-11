@@ -5,12 +5,14 @@ import {
   Search,
   LayoutGrid,
   List,
+  Keyboard,
 } from 'lucide-react';
 import Button from '../common/Button';
 
 export default function Navbar({
   onOpenMobileNav,
   onOpenAddItem,
+  onOpenShortcuts,
   searchQuery,
   setSearchQuery,
   viewMode,
@@ -125,6 +127,19 @@ export default function Navbar({
             <List className="w-4 h-4" />
           </button>
         </div>
+
+        {/* Keyboard Shortcuts hint button */}
+        <button
+          id="open-shortcuts-overlay-btn"
+          type="button"
+          onClick={onOpenShortcuts}
+          title="Keyboard shortcuts (?)"
+          aria-label="Open keyboard shortcuts reference"
+          className="hidden sm:inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/80 border border-zinc-700/40 hover:border-zinc-600/60 transition-colors cursor-pointer"
+        >
+          <Keyboard className="w-3.5 h-3.5" />
+          <kbd className="text-[10px] font-mono">?</kbd>
+        </button>
 
         {/* Add Item CTA Button */}
         <Button
