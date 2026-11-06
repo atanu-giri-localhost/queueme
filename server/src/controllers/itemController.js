@@ -1,5 +1,5 @@
 import prisma from '../prisma.js';
-import { INITIAL_ITEMS } from '../../../src/data/sampleData.js';
+import { INITIAL_ITEMS } from '../data/sampleData.js';
 
 /**
  * GET /api/items

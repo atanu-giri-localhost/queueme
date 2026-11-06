@@ -52,12 +52,32 @@ export function syncStatusAndProgress(data) {
   return synced;
 }
 
-// Transform tags from string or array to trimmed string array
+// Transform tags from string or array to trimmed string array.
+// Used in createItemSchema — always returns an array (empty if unset).
 const tagsTransform = z
   .union([z.array(z.string()), z.string()])
   .optional()
   .transform((val) => {
     if (!val) return [];
+    if (Array.isArray(val)) {
+      return val.map((t) => String(t).trim().replace(/^#/, '')).filter(Boolean);
+    }
+    return String(val)
+      .split(',')
+      .map((t) => t.trim().replace(/^#/, ''))
+      .filter(Boolean);
+  });
+
+// Transform tags for PATCH/PUT updates:
+// - When tags field is ABSENT (undefined), returns undefined so Prisma omits the field
+//   and existing tags are preserved (critical: prevents silent tag erasure on partial updates).
+// - When tags field IS present (even empty array), normalizes and stores it.
+const tagsUpdateTransform = z
+  .union([z.array(z.string()), z.string()])
+  .optional()
+  .transform((val) => {
+    if (val === undefined) return undefined; // omit — do not overwrite existing tags
+    if (!val || (Array.isArray(val) && val.length === 0)) return [];
     if (Array.isArray(val)) {
       return val.map((t) => String(t).trim().replace(/^#/, '')).filter(Boolean);
     }
@@ -105,7 +125,7 @@ export const updateItemSchema = z
     priority: z.enum(ITEM_PRIORITIES).optional(),
     releaseYear: z.string().trim().optional().nullable(),
     rating: z.union([z.string(), z.number()]).optional().nullable(),
-    tags: tagsTransform,
+    tags: tagsUpdateTransform,
     coverImage: z.string().trim().optional().nullable(),
     url: z.string().trim().optional().nullable(),
     sourceUrl: z.string().trim().optional().nullable(),
@@ -113,6 +133,13 @@ export const updateItemSchema = z
     addedDate: z.string().trim().optional().nullable(),
   })
   .transform((data) => {
+    // Remove undefined tags so Prisma does not overwrite existing tags on partial updates.
+    // tagsUpdateTransform returns undefined when tags was absent from the request body,
+    // which is the signal to leave the DB column untouched.
+    if (data.tags === undefined) {
+      delete data.tags;
+    }
+
     // If status is updated or progress is provided, sync them
     if (data.status !== undefined || data.progress !== undefined) {
       return syncStatusAndProgress(data);

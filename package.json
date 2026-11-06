@@ -3,20 +3,25 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "server": "node server/src/index.js",
-    "server:dev": "node --watch server/src/index.js",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "node prisma/seed.js",
-    "test:backend": "node server/test/api.test.js"
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js"
+    "dev": "npm --prefix client run dev",
+    "build": "npm --prefix client run build && mkdir -p ./dist && cp -r client/dist/* ./dist/ 2>/dev/null || true",
+    "preview": "npm --prefix client run preview",
+    "server": "npm --prefix server run start",
+    "server:dev": "npm --prefix server run dev",
+    "prisma:generate": "npm --prefix server run prisma:generate",
+    "prisma:migrate": "npm --prefix server run prisma:migrate",
+    "prisma:seed": "npm --prefix server run prisma:seed",
+    "prisma:studio": "npm --prefix server run prisma:studio",
+    "test:backend": "npm --prefix server run test",
+    "test:persistence": "node server/test/persistence.test.js",
+    "test:phase2": "node server/test/phase2.test.js",
+    "test:qa": "node server/test/qa_audit.test.js",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

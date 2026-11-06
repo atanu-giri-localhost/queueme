@@ -1,0 +1,22 @@
+
+services:
+  db:
+    image: postgres:17
+    container_name: queueme-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: queueme_user
+      POSTGRES_PASSWORD: queueme_local_dev
+      POSTGRES_DB: queueme_db
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - queueme_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U queueme_user -d queueme_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  queueme_postgres_data:

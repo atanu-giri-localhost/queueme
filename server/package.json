@@ -1,0 +1,32 @@
+{
+  "name": "queueme-server",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node test/api.test.js",
+    "test:persistence": "node test/persistence.test.js",
+    "test:qa": "node test/qa_audit.test.js",
+    "prisma:generate": "prisma generate --schema=prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema=prisma/schema.prisma",
+    "prisma:seed": "node prisma/seed.js",
+    "prisma:studio": "prisma studio --schema=prisma/schema.prisma"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma",
+    "seed": "node prisma/seed.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "prisma": "^6.19.3",
+    "supertest": "^7.3.1"
+  }
+}
