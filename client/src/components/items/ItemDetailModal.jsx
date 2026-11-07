@@ -181,6 +181,60 @@ export default function ItemDetailModal({
         aria-labelledby="detail-modal-title"
         className="relative w-full max-w-2xl bg-zinc-950 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden z-10 my-8 animate-in fade-in zoom-in-95 duration-200"
       >
+        {/* Centered Delete Confirmation Popup Overlay */}
+        {showDeleteConfirm && (
+          <div
+            className="absolute inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-150"
+            onClick={() => setShowDeleteConfirm(false)}
+          >
+            <div
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="delete-confirm-title"
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-md bg-zinc-900 border border-zinc-700/80 rounded-2xl p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 id="delete-confirm-title" className="text-base font-bold text-white">
+                    Delete item from backlog?
+                  </h3>
+                  <p className="text-xs text-zinc-400 mt-0.5">
+                    This action cannot be undone.
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-xs text-zinc-300 leading-relaxed bg-zinc-950/60 p-3.5 rounded-xl border border-zinc-800/80">
+                Are you sure you want to remove <span className="text-white font-semibold">&ldquo;{item.title}&rdquo;</span>? This will immediately remove it from your queue.
+              </p>
+
+              <div className="flex items-center justify-end gap-2.5 pt-1">
+                <button
+                  id="cancel-delete-btn"
+                  type="button"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="px-3.5 py-2 rounded-xl text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 border border-zinc-700/60 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  id="confirm-delete-btn"
+                  type="button"
+                  onClick={handleConfirmDelete}
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 border border-rose-500 shadow-md shadow-rose-950/40 transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Yes, Delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Top Image Banner */}
         <div className="relative h-52 sm:h-60 w-full bg-zinc-900 overflow-hidden">
           {item.coverImage ? (
@@ -232,38 +286,6 @@ export default function ItemDetailModal({
 
         {/* Content Body */}
         <div className="p-6 sm:p-8 space-y-6 max-h-[calc(85vh-15rem)] overflow-y-auto">
-          {/* Delete Confirmation Alert Banner */}
-          {showDeleteConfirm && (
-            <div role="alert" className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-200 space-y-3 animate-in fade-in duration-150">
-              <div className="flex items-center gap-2 text-rose-400 font-semibold text-sm">
-                <AlertTriangle className="w-4 h-4 shrink-0" />
-                <span>Delete item from backlog?</span>
-              </div>
-              <p className="text-xs text-rose-300/80 leading-relaxed">
-                Are you sure you want to remove &ldquo;{item.title}&rdquo;? This will immediately remove it from your queue.
-              </p>
-              <div className="flex items-center justify-end gap-2 pt-1">
-                <button
-                  id="cancel-delete-btn"
-                  type="button"
-                  onClick={() => setShowDeleteConfirm(false)}
-                  className="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/60 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  id="confirm-delete-btn"
-                  type="button"
-                  onClick={handleConfirmDelete}
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 border border-rose-500 shadow-md shadow-rose-950/40 transition-colors cursor-pointer flex items-center gap-1.5"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span>Yes, Delete</span>
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* EDIT MODE FORM */}
           {isEditing ? (
             <form onSubmit={handleSaveEdit} className="space-y-4">
