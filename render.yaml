@@ -1,0 +1,24 @@
+# Render Blueprint Specification for QueueMe Backend API
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: queueme-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install && npm run build && npm run prisma:deploy
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: CORS_ORIGIN
+        value: "*"

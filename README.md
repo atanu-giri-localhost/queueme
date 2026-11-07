@@ -110,6 +110,7 @@ docker ps
 
    # PostgreSQL connection string via Prisma (matches docker-compose.yaml)
    DATABASE_URL="postgresql://queueme_user:queueme_local_dev@127.0.0.1:5434/queueme_db?schema=public"
+   DIRECT_URL="postgresql://queueme_user:queueme_local_dev@127.0.0.1:5434/queueme_db?schema=public"
    ```
 
 3. *(Optional for frontend)*: In `client/`, create `.env` if pointing to a non-default API:
@@ -247,20 +248,18 @@ Deploy the `server/` directory as a Node.js web service or Docker container:
   CORS_ORIGIN="https://your-frontend-domain.com"
   ```
 
-#### 3. Frontend Tier: React SPA
+#### 3. Frontend Tier: React SPA (Cloudflare Pages / Vercel)
 Deploy the `client/` directory to an edge CDN or static hosting platform:
-- **Recommended Platforms**: [Vercel](https://vercel.com/), [Netlify](https://netlify.com/), [Cloudflare Pages](https://pages.cloudflare.com/), or [AWS Amplify].
+- **Recommended Platform**: [Cloudflare Pages](https://pages.cloudflare.com/) (or Vercel / Netlify).
+- **Framework Preset**: `Vite` (or `None`)
 - **Root Directory**: `client`
-- **Build Command**:
-  ```bash
-  npm run build
-  ```
-- **Output Directory**: `dist` (or `client/dist`)
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
 - **Required Frontend Environment Variable**:
   ```env
-  VITE_API_URL="https://your-backend-api-domain.com/api"
+  VITE_API_URL="https://your-backend-api-domain.onrender.com/api"
   ```
-- **SPA Rewrite Rule**: Ensure all non-file routes redirect to `/index.html` (e.g. `/* -> /index.html 200` in `_redirects` or `vercel.json`).
+- **SPA Routing & Caching**: Cloudflare Pages natively provides built-in 200 fallback to `index.html` for single-page applications. Static asset performance and security headers are pre-configured via [`client/public/_headers`](file:///home/atanu/Desktop/queueme/client/public/_headers) (immutable caching for assets and security headers).
 
 #### 4. Alternative: Single VPS / Docker Deployment
 For single-server deployment (DigitalOcean Droplet, Hetzner, AWS EC2):
