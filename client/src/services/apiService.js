@@ -1,15 +1,26 @@
 import { sanitizeQueueItem } from './storageService.js';
 
 export function getApiBaseUrl() {
-  return (
+  let envUrl =
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
-    (typeof globalThis !== 'undefined' && globalThis.process?.env?.VITE_API_URL) ||
-    (typeof window !== 'undefined' && window.location.port === '5173'
-      ? 'http://localhost:5000/api'
-      : typeof window !== 'undefined'
-        ? '/api'
-        : 'http://localhost:5000/api')
-  );
+    (typeof globalThis !== 'undefined' && globalThis.process?.env?.VITE_API_URL);
+
+  if (envUrl && typeof envUrl === 'string') {
+    let clean = envUrl.trim().replace(/\/+$/, '');
+    if (!clean.endsWith('/api') && /^https?:\/\//i.test(clean)) {
+      clean = `${clean}/api`;
+    }
+    return clean;
+  }
+
+  if (typeof window !== 'undefined') {
+    if (window.location.port === '5173') {
+      return 'http://localhost:5000/api';
+    }
+    return '/api';
+  }
+
+  return 'http://localhost:5000/api';
 }
 
 export const API_BASE_URL = getApiBaseUrl();
