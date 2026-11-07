@@ -3,8 +3,8 @@ import path from 'node:path';
 import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 
-// Ensure DATABASE_URL is resolved regardless of invocation cwd
-if (!process.env.DATABASE_URL) {
+// Ensure DATABASE_URL and DIRECT_URL are resolved regardless of invocation cwd
+if (!process.env.DATABASE_URL || !process.env.DIRECT_URL) {
   dotenv.config({ path: path.resolve(process.cwd(), '.env') });
   dotenv.config({ path: path.resolve(process.cwd(), 'server/.env') });
   dotenv.config({ path: path.resolve(import.meta.dirname, '../.env') });
