@@ -8,6 +8,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import TypeIcon from '../common/TypeIcon';
+import logoIcon from '../../assets/queueme-icon.svg';
 
 export default function Sidebar({
   isCollapsed,
@@ -98,9 +99,11 @@ export default function Sidebar({
           className="flex items-center gap-3 cursor-pointer group overflow-hidden"
           title="QueueMe Home"
         >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-600/30 ring-1 ring-white/20 shrink-0 group-hover:scale-105 transition-transform">
-            <span className="font-extrabold text-white text-lg tracking-tighter">Q</span>
-          </div>
+          <img
+            src={logoIcon}
+            alt="QueueMe Logo"
+            className="w-9 h-9 rounded-xl shadow-lg shadow-indigo-600/20 ring-1 ring-white/20 shrink-0 group-hover:scale-105 transition-transform object-cover"
+          />
           {!isCollapsed && (
             <div className="flex flex-col">
               <span className="font-bold text-base tracking-tight text-white flex items-center gap-1.5">

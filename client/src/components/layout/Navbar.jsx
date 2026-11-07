@@ -8,6 +8,7 @@ import {
   Keyboard,
 } from 'lucide-react';
 import Button from '../common/Button';
+import logoIcon from '../../assets/queueme-icon.svg';
 
 export default function Navbar({
   onOpenMobileNav,
@@ -55,10 +56,12 @@ export default function Navbar({
         </button>
 
         {/* Mobile Brand */}
-        <div className="md:hidden flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-white text-sm">
-            Q
-          </div>
+        <div className="md:hidden flex items-center gap-2.5">
+          <img
+            src={logoIcon}
+            alt="QueueMe Logo"
+            className="w-7 h-7 rounded-lg object-cover shadow-sm ring-1 ring-white/10 shrink-0"
+          />
           <span className="font-bold text-base text-white tracking-tight">QueueMe</span>
         </div>
 

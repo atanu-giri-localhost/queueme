@@ -8,6 +8,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import TypeIcon from '../common/TypeIcon';
+import logoIcon from '../../assets/queueme-icon.svg';
 
 export default function MobileNav({
   isOpen,
@@ -57,9 +58,11 @@ export default function MobileNav({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-white text-base">
-              Q
-            </div>
+            <img
+              src={logoIcon}
+              alt="QueueMe Logo"
+              className="w-8 h-8 rounded-xl ring-1 ring-white/20 shrink-0 object-cover shadow-sm"
+            />
             <div>
               <h2 className="font-bold text-sm text-white">QueueMe</h2>
               <p className="text-[11px] text-zinc-500">Backlog & Watchlist</p>
