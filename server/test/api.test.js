@@ -21,6 +21,8 @@ async function runTests() {
     }
   }
 
+  let createdItemId = null;
+
   try {
     // 1. Health check
     await test('GET /api/health returns 200 and ok status', async () => {
@@ -30,73 +32,7 @@ async function runTests() {
       assert.equal(res.body.service, 'queueme-api');
     });
 
-    // Reset items first to ensure clean state
-    await test('POST /api/items/reset resets sample data', async () => {
-      const res = await request(app).post('/api/items/reset');
-      assert.equal(res.status, 200);
-      assert.equal(res.body.success, true);
-      assert.equal(res.body.count, 15);
-    });
-
-    // 2. List items
-    await test('GET /api/items returns all 15 items', async () => {
-      const res = await request(app).get('/api/items');
-      assert.equal(res.status, 200);
-      assert.equal(res.body.success, true);
-      assert.equal(res.body.count, 15);
-      assert.ok(Array.isArray(res.body.data));
-    });
-
-    // 3. Audio category filtering
-    await test('GET /api/items?type=audio returns 3 audio items with sourceUrl', async () => {
-      const res = await request(app).get('/api/items?type=audio');
-      assert.equal(res.status, 200);
-      assert.equal(res.body.count, 3);
-      const allAudio = res.body.data.every((i) => i.type === 'audio');
-      assert.ok(allAudio);
-      const hasAudioSource = res.body.data.some((i) => Boolean(i.sourceUrl));
-      assert.ok(hasAudioSource);
-    });
-
-    // 4. Status filtering
-    await test('GET /api/items?status=in_progress filters accurately', async () => {
-      const res = await request(app).get('/api/items?status=in_progress');
-      assert.equal(res.status, 200);
-      assert.ok(res.body.data.every((i) => i.status === 'in_progress'));
-    });
-
-    // 5. Search filtering (text and #tag)
-    await test('GET /api/items?search=Lex matches Lex Fridman podcast', async () => {
-      const res = await request(app).get('/api/items?search=Lex');
-      assert.equal(res.status, 200);
-      assert.ok(res.body.data.length >= 1);
-      assert.ok(res.body.data.some((i) => i.title.includes('Lex Fridman')));
-    });
-
-    await test('GET /api/items?search=%23AI matches #AI tagged items', async () => {
-      const res = await request(app).get('/api/items?search=%23AI');
-      assert.equal(res.status, 200);
-      assert.ok(res.body.data.length >= 1);
-      assert.ok(res.body.data.every((i) => i.tags.includes('AI')));
-    });
-
-    // 6. Get item by id
-    await test('GET /api/items/qm-13 returns Lex Fridman item with correct metadata', async () => {
-      const res = await request(app).get('/api/items/qm-13');
-      assert.equal(res.status, 200);
-      assert.equal(res.body.data.id, 'qm-13');
-      assert.equal(res.body.data.type, 'audio');
-      assert.equal(res.body.data.sourceUrl, 'https://open.spotify.com/episode/lex-fridman-419');
-    });
-
-    await test('GET /api/items/non-existent returns 404', async () => {
-      const res = await request(app).get('/api/items/non-existent');
-      assert.equal(res.status, 404);
-      assert.equal(res.body.success, false);
-    });
-
-    // 7. Create item (including audio item)
-    let createdItemId = null;
+    // 2. Create item with validated schema
     await test('POST /api/items creates new Audio item with validated schema', async () => {
       const payload = {
         title: 'Huberman Lab – Optimal Sleep Protocol',
@@ -122,7 +58,7 @@ async function runTests() {
       assert.ok(createdItemId);
     });
 
-    // 8. Validation errors on invalid inputs
+    // 3. Validation errors on invalid inputs
     await test('POST /api/items rejects missing title with 400', async () => {
       const res = await request(app).post('/api/items').send({
         type: 'movie',
@@ -141,7 +77,51 @@ async function runTests() {
       assert.equal(res.body.success, false);
     });
 
-    // 9. Update item
+    // 4. Retrieve item by ID
+    await test('GET /api/items/:id returns created item with metadata', async () => {
+      const res = await request(app).get(`/api/items/${createdItemId}`);
+      assert.equal(res.status, 200);
+      assert.equal(res.body.data.id, createdItemId);
+      assert.equal(res.body.data.type, 'audio');
+      assert.equal(res.body.data.sourceUrl, 'https://open.spotify.com/episode/huberman-sleep');
+    });
+
+    await test('GET /api/items/non-existent returns 404', async () => {
+      const res = await request(app).get('/api/items/non-existent');
+      assert.equal(res.status, 404);
+      assert.equal(res.body.success, false);
+    });
+
+    // 5. List items
+    await test('GET /api/items returns list containing created item', async () => {
+      const res = await request(app).get('/api/items');
+      assert.equal(res.status, 200);
+      assert.equal(res.body.success, true);
+      assert.ok(Array.isArray(res.body.data));
+      assert.ok(res.body.data.some((i) => i.id === createdItemId));
+    });
+
+    // 6. Category and search filtering
+    await test('GET /api/items?type=audio filters accurately', async () => {
+      const res = await request(app).get('/api/items?type=audio');
+      assert.equal(res.status, 200);
+      const allAudio = res.body.data.every((i) => i.type === 'audio');
+      assert.ok(allAudio);
+    });
+
+    await test('GET /api/items?search=Huberman matches search query', async () => {
+      const res = await request(app).get('/api/items?search=Huberman');
+      assert.equal(res.status, 200);
+      assert.ok(res.body.data.some((i) => i.id === createdItemId));
+    });
+
+    await test('GET /api/items?search=%23Sleep matches #Sleep tagged items', async () => {
+      const res = await request(app).get('/api/items?search=%23Sleep');
+      assert.equal(res.status, 200);
+      assert.ok(res.body.data.some((i) => i.id === createdItemId));
+    });
+
+    // 7. Update item (PATCH)
     await test('PATCH /api/items/:id updates status and auto-syncs progress to 100 on completion', async () => {
       const res = await request(app)
         .patch(`/api/items/${createdItemId}`)
@@ -156,7 +136,7 @@ async function runTests() {
       assert.equal(res.body.data.rating, '4.9');
     });
 
-    // 10. Delete item
+    // 8. Delete item
     await test('DELETE /api/items/:id deletes created item', async () => {
       const res = await request(app).delete(`/api/items/${createdItemId}`);
       assert.equal(res.status, 200);
@@ -165,16 +145,17 @@ async function runTests() {
       // Verify it's gone
       const verifyRes = await request(app).get(`/api/items/${createdItemId}`);
       assert.equal(verifyRes.status, 404);
+      createdItemId = null;
     });
-
-    // 11. Reset database back to clean sample items
-    await test('POST /api/items/reset restores initial 15 items', async () => {
-      const res = await request(app).post('/api/items/reset');
-      assert.equal(res.status, 200);
-      assert.equal(res.body.count, 15);
-    });
-
   } finally {
+    // If test failed before deleting created item, clean it up
+    if (createdItemId) {
+      try {
+        await prisma.item.delete({ where: { id: createdItemId } });
+      } catch (cleanupErr) {
+        console.warn('Cleanup error:', cleanupErr.message);
+      }
+    }
     await prisma.$disconnect();
   }
 

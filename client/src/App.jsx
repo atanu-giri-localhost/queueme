@@ -5,7 +5,6 @@ import {
   ArrowRight,
   FilterX,
   AlertTriangle,
-  RotateCcw,
 } from 'lucide-react';
 
 import { useQueueStorage } from './hooks/useQueueStorage';
@@ -20,7 +19,6 @@ import ItemCard from './components/items/ItemCard';
 import ItemListItem from './components/items/ItemListItem';
 import ItemDetailModal from './components/items/ItemDetailModal';
 import AddItemModal from './components/items/AddItemModal';
-import ResetConfirmationModal from './components/common/ResetConfirmationModal';
 import Button from './components/common/Button';
 import KeyboardShortcutsOverlay from './components/common/KeyboardShortcutsOverlay';
 
@@ -29,14 +27,12 @@ export default function App() {
     items,
     setItems,
     isCorrupted,
-    resetToSampleData,
   } = useQueueStorage();
 
   const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard' | 'queue'
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -237,7 +233,7 @@ export default function App() {
         case 'n':
         case 'N':
           e.preventDefault();
-          if (!selectedItem && !isAddModalOpen && !isResetModalOpen) {
+          if (!selectedItem && !isAddModalOpen) {
             setIsAddModalOpen(true);
           }
           break;
@@ -270,7 +266,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleGlobalKey);
     return () => window.removeEventListener('keydown', handleGlobalKey);
-  }, [isTypingInField, selectedItem, isAddModalOpen, isResetModalOpen]);
+  }, [isTypingInField, selectedItem, isAddModalOpen]);
 
   return (
     <div className="flex h-screen w-full bg-zinc-950 text-zinc-100 overflow-hidden font-sans">
@@ -285,7 +281,6 @@ export default function App() {
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
         counts={counts}
-        onOpenResetModal={() => setIsResetModalOpen(true)}
       />
 
       {/* Mobile Drawer Navigation */}
@@ -299,7 +294,6 @@ export default function App() {
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
         counts={counts}
-        onOpenResetModal={() => setIsResetModalOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -334,20 +328,10 @@ export default function App() {
                   Unparseable LocalStorage data detected in 'queueme_items_v1'
                 </p>
                 <p className="text-xs text-amber-300/80">
-                  Showing temporary sample data in memory. Your stored data has been kept intact without overwriting.
+                  Falling back to an empty queue. Your stored data has been kept intact without overwriting.
                 </p>
               </div>
             </div>
-            <Button
-              id="storage-banner-reset-btn"
-              variant="secondary"
-              size="xs"
-              onClick={() => setIsResetModalOpen(true)}
-              icon={RotateCcw}
-              className="bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border-amber-500/40 shrink-0"
-            >
-              Reset to Sample Data
-            </Button>
           </div>
         )}
 
@@ -601,13 +585,6 @@ export default function App() {
         onAddItem={handleAddItem}
       />
 
-      {/* Reset to Sample Data Confirmation Modal */}
-      <ResetConfirmationModal
-        isOpen={isResetModalOpen}
-        onClose={() => setIsResetModalOpen(false)}
-        onConfirm={resetToSampleData}
-        isCorrupted={isCorrupted}
-      />
 
       {/* Keyboard Shortcuts Help Overlay — press ? to open */}
       <KeyboardShortcutsOverlay

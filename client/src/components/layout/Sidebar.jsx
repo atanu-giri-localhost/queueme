@@ -5,7 +5,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Flame,
-  RotateCcw,
 } from 'lucide-react';
 import TypeIcon from '../common/TypeIcon';
 import logoIcon from '../../assets/queueme-icon.svg';
@@ -20,7 +19,6 @@ export default function Sidebar({
   statusFilter,
   setStatusFilter,
   counts,
-  onOpenResetModal,
 }) {
   const mainNavItems = [
     {
@@ -235,19 +233,6 @@ export default function Sidebar({
 
       {/* User Footer */}
       <div className="p-3 border-t border-zinc-800/60 bg-zinc-950/60 space-y-2">
-        <button
-          id="sidebar-reset-demo-btn"
-          type="button"
-          onClick={onOpenResetModal}
-          title={isCollapsed ? 'Reset to Sample Data' : undefined}
-          className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl text-xs font-medium text-zinc-400 hover:text-amber-300 hover:bg-zinc-900/80 border border-transparent hover:border-zinc-800/80 transition-colors cursor-pointer ${
-            isCollapsed ? 'justify-center px-1.5' : ''
-          }`}
-        >
-          <RotateCcw className="w-3.5 h-3.5 shrink-0 text-zinc-400 group-hover:text-amber-400" />
-          {!isCollapsed && <span>Reset to Sample Data</span>}
-        </button>
-
         <div
           className={`flex items-center gap-3 p-2 rounded-xl hover:bg-zinc-900/80 border border-zinc-800/40 transition-colors ${
             isCollapsed ? 'justify-center p-1.5' : ''

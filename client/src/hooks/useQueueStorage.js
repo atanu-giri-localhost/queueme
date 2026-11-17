@@ -3,7 +3,6 @@ import {
   QUEUE_STORAGE_KEY,
   loadStoredQueue,
   saveStoredQueue,
-  resetStoredQueue,
   sanitizeQueueItem,
 } from '../services/storageService.js';
 import apiService from '../services/apiService.js';
@@ -14,7 +13,7 @@ import apiService from '../services/apiService.js';
  * Phase 2 Architecture:
  * - Primary persistence: Express + PostgreSQL API via apiService.js
  * - Resilient fallback: LocalStorage caching prevents silent data loss if offline or server is down.
- * - Public API preserved: { items, setItems, storageStatus, storageError, isCorrupted, resetToSampleData }
+ * - Public API: { items, setItems, storageStatus, storageError, isCorrupted }
  * - Optimistic local updates for snappy 0ms UI latency, with background PostgreSQL synchronization.
  */
 export function useQueueStorage(storageKey = QUEUE_STORAGE_KEY) {
@@ -194,34 +193,6 @@ export function useQueueStorage(storageKey = QUEUE_STORAGE_KEY) {
     [syncWithApi, storageStatus, storageKey]
   );
 
-  /**
-   * Reset action: re-seeds PostgreSQL database and updates state
-   */
-  const resetToSampleData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      // Re-seed remote PostgreSQL database
-      const resetItems = await apiService.resetItems();
-      setItemsState(resetItems);
-      setStorageStatus('valid');
-      setStorageError(null);
-      setCorruptedRawData(null);
-      // Backup reset state to localStorage
-      resetStoredQueue(storageKey);
-      return { success: true, items: resetItems };
-    } catch (apiErr) {
-      console.warn('API reset failed, falling back to LocalStorage reset:', apiErr.message);
-      const fallbackResult = resetStoredQueue(storageKey);
-      setItemsState(fallbackResult.items);
-      setStorageStatus('fallback');
-      setStorageError(apiErr.message);
-      setCorruptedRawData(null);
-      return fallbackResult;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [storageKey]);
-
   return {
     items,
     setItems,
@@ -229,7 +200,6 @@ export function useQueueStorage(storageKey = QUEUE_STORAGE_KEY) {
     storageError,
     corruptedRawData,
     isCorrupted: storageStatus === 'corrupted',
-    resetToSampleData,
     isLoading,
     isApiConnected: storageStatus === 'valid',
     isFallback: storageStatus === 'fallback',

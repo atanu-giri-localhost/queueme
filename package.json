@@ -20,8 +20,6 @@
     "prisma:studio": "npm --prefix server run prisma:studio",
     "test:backend": "npm --prefix server run test",
     "test:persistence": "node server/test/persistence.test.js",
-    "test:phase2": "node server/test/phase2.test.js",
-    "test:qa": "node server/test/qa_audit.test.js",
     "lint": "eslint ."
   },
   "dependencies": {

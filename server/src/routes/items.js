@@ -5,7 +5,6 @@ import {
   createItem,
   updateItem,
   deleteItem,
-  resetItems,
 } from '../controllers/itemController.js';
 import {
   createItemSchema,
@@ -16,9 +15,6 @@ import {
 } from '../validators/itemValidator.js';
 
 const router = Router();
-
-// Re-seed items to sample dataset
-router.post('/reset', resetItems);
 
 // List items with filters, sorting, and search
 router.get('/', validateQuery(queryParamsSchema), getItems);

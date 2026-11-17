@@ -164,17 +164,6 @@ export const apiService = {
       method: 'DELETE',
     });
   },
-
-  /**
-   * Reset items in PostgreSQL to initial seed items
-   */
-  async resetItems() {
-    const response = await apiRequest('/items/reset', {
-      method: 'POST',
-    });
-    const rawList = Array.isArray(response) ? response : response?.data || [];
-    return rawList.map(sanitizeQueueItem);
-  },
 };
 
 export default apiService;

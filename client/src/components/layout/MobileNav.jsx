@@ -5,7 +5,6 @@ import {
   Layers,
   Flame,
   CheckCircle2,
-  RotateCcw,
 } from 'lucide-react';
 import TypeIcon from '../common/TypeIcon';
 import logoIcon from '../../assets/queueme-icon.svg';
@@ -20,7 +19,6 @@ export default function MobileNav({
   statusFilter,
   setStatusFilter,
   counts,
-  onOpenResetModal,
 }) {
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -210,21 +208,8 @@ export default function MobileNav({
           </div>
         </div>
 
-        {/* Reset & User Info */}
+        {/* User Info */}
         <div className="pt-4 border-t border-zinc-800/80 space-y-3">
-          <button
-            id="mobile-nav-reset-demo-btn"
-            type="button"
-            onClick={() => {
-              onClose();
-              if (onOpenResetModal) onOpenResetModal();
-            }}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-zinc-400 hover:text-amber-300 bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800 transition-colors cursor-pointer"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset to Sample Data</span>
-          </button>
-
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center font-bold text-xs text-zinc-950">
               AC

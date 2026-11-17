@@ -20,7 +20,7 @@ queueme/
 │   │   ├── services/
 │   │   │   ├── apiService.js        # Centralized HTTP client for backend REST API
 │   │   │   └── storageService.js    # Data sanitization, validation & LocalStorage backup
-│   │   ├── data/sampleData.js       # Category definitions, status configs & sample items
+│   │   ├── data/queueConfig.js      # Category definitions & status badge configurations
 │   │   ├── App.jsx                  # Main application shell & keyboard listeners
 │   │   └── main.jsx                 # React root mount
 │   ├── public/                      # Static assets & icons
@@ -32,21 +32,18 @@ queueme/
 │   ├── prisma/
 │   │   ├── schema.prisma            # PostgreSQL schema, enums (MediaType, ItemStatus, ItemPriority)
 │   │   ├── migrations/              # SQL migration history
-│   │   └── seed.js                  # Database seeder (15 items including Audio category)
+│   │   └── seed.js                  # Database initialization script
 │   ├── src/
 │   │   ├── app.js                   # Express app configuration (CORS, healthcheck, routes)
 │   │   ├── index.js                 # Server entry point & graceful shutdown handlers
 │   │   ├── prisma.js                # PrismaClient singleton
-│   │   ├── controllers/             # Item CRUD controllers & reset endpoint
+│   │   ├── controllers/             # Item CRUD controllers
 │   │   ├── routes/                  # Express route handlers & middleware validation
 │   │   ├── validators/              # Zod validation schemas & status/progress sync logic
-│   │   ├── middlewares/             # Centralized error handler & status normalization
-│   │   └── data/                    # Server-side seed definitions
+│   │   └── middlewares/             # Centralized error handler & status normalization
 │   ├── test/
-│   │   ├── qa_audit.test.js         # 114-test end-to-end QA audit suite (100% pass)
 │   │   ├── api.test.js              # Supertest REST API integration tests
-│   │   ├── persistence.test.js      # Server restart & process reboot persistence tests
-│   │   └── phase2.test.js           # apiService & client-backend integration tests
+│   │   └── persistence.test.js      # Server restart & process reboot persistence tests
 │   ├── .env.example                 # Backend environment variable template
 │   └── package.json                 # Backend dependencies & test scripts
 │
@@ -68,7 +65,7 @@ queueme/
 - **Granular Filtering & Sorting**: Filter by media type, status (`queued`, `in_progress`, `completed`), and priority (`high`, `medium`, `low`); sort by recent, priority, progress, or title.
 - **Auto-Synchronized Progress**: Setting an item to `completed` automatically marks progress at 100% ("Finished"); moving to `queued` resets progress to 0%.
 - **Rating Normalization**: Unified 1.0–5.0 star scale with automatic 10-point legacy scaling.
-- **Keyboard Shortcuts**: Quick modal triggers and navigation (`a` for Add Item, `r` for Reset confirmation, `?` for Shortcuts overlay, `Esc` to close).
+- **Keyboard Shortcuts**: Quick modal triggers and navigation (`N` for Add Item, `1`/`2` for Views, `G`/`L` for Grid/List, `/` for search, `?` for Shortcuts overlay, `Esc` to close).
 
 ---
 
@@ -172,16 +169,14 @@ QueueMe includes a comprehensive test suite across unit, integration, persistenc
 
 | Command | Target | Description |
 | :--- | :--- | :--- |
-| `npm run test:qa` | Full QA Audit | **114 / 114 tests passing** across 22 test suites (CRUD, search, filters, audio, sorting, progress sync, validation, restarts, LocalStorage independence) |
 | `npm run test:backend` | API Integration | Supertest suite validating HTTP endpoints, status codes, and JSON response envelopes |
 | `npm run test:persistence` | Process Restarts | Validates data survival across server process death and fresh reboots |
-| `npm run test:phase2` | Client Integration | Validates `apiService.js` against live PostgreSQL instance |
 | `npm run lint` | Code Quality | ESLint code quality checks across client and server |
 | `npm run build` | Production Build | Compiles Vite production bundle |
 
-To run the complete end-to-end QA audit:
+To run the automated API tests:
 ```bash
-npm run test:qa
+npm run test:backend
 ```
 
 ---
@@ -286,7 +281,6 @@ Base URL: `http://localhost:5000/api`
 | `PATCH` | `/api/items/:id` | Update item fields (auto-syncs status & progress, preserves unmentioned fields) |
 | `PUT` | `/api/items/:id` | Replace / full update item fields |
 | `DELETE` | `/api/items/:id` | Delete item by ID |
-| `POST` | `/api/items/reset` | Reset PostgreSQL items back to initial sample dataset |
 
 ---
 

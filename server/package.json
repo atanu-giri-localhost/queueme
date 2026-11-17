@@ -13,8 +13,7 @@
     "prisma:studio": "prisma studio --schema=prisma/schema.prisma",
     "dev": "node --watch src/index.js",
     "test": "node test/api.test.js",
-    "test:persistence": "node test/persistence.test.js",
-    "test:qa": "node test/qa_audit.test.js"
+    "test:persistence": "node test/persistence.test.js"
   },
   "engines": {
     "node": ">=18.0.0"

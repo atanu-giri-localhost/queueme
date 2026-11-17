@@ -1,5 +1,4 @@
 import prisma from '../prisma.js';
-import { INITIAL_ITEMS } from '../data/sampleData.js';
 
 /**
  * GET /api/items
@@ -184,60 +183,6 @@ export async function deleteItem(req, res, next) {
       success: true,
       message: `Item with id '${id}' deleted successfully`,
       id,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
-
-/**
- * POST /api/items/reset
- * Reset the database to the initial sample items (matches the client reset action)
- */
-export async function resetItems(req, res, next) {
-  try {
-    await prisma.item.deleteMany({});
-
-    for (const item of INITIAL_ITEMS) {
-      await prisma.item.create({
-        data: {
-          id: item.id,
-          title: item.title,
-          type: item.type,
-          creator: item.creator || '',
-          platform: item.platform || '',
-          duration: item.duration || '',
-          progress: typeof item.progress === 'number' ? item.progress : 0,
-          progressLabel:
-            item.progressLabel ||
-            (item.status === 'completed'
-              ? 'Finished'
-              : item.status === 'queued'
-                ? 'Not started'
-                : `In progress (${item.progress ?? 0}%)`),
-          status: item.status || 'queued',
-          priority: item.priority || 'medium',
-          releaseYear: item.releaseYear || null,
-          rating: item.rating ? String(item.rating) : null,
-          tags: Array.isArray(item.tags) ? item.tags : [],
-          coverImage: item.coverImage || null,
-          url: item.url || null,
-          sourceUrl: item.sourceUrl || null,
-          notes: item.notes || null,
-          addedDate: item.addedDate || new Date().toISOString().split('T')[0],
-        },
-      });
-    }
-
-    const items = await prisma.item.findMany({
-      orderBy: [{ addedDate: 'desc' }, { createdAt: 'desc' }],
-    });
-
-    res.json({
-      success: true,
-      message: 'Queue items reset to initial sample data successfully',
-      count: items.length,
-      data: items,
     });
   } catch (error) {
     next(error);

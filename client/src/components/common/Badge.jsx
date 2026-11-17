@@ -1,5 +1,5 @@
 import TypeIcon from './TypeIcon';
-import { CATEGORIES, STATUS_CONFIG, PRIORITY_CONFIG } from '../../data/sampleData';
+import { CATEGORIES, STATUS_CONFIG, PRIORITY_CONFIG } from '../../data/queueConfig';
 
 export function TypeBadge({ type, size = 'sm', showIcon = true }) {
   const cat = CATEGORIES[type] || { label: type, badgeClass: 'bg-zinc-800 text-zinc-300 border-zinc-700' };

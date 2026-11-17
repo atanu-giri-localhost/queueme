@@ -1,13 +1,10 @@
-import { INITIAL_ITEMS } from '../data/sampleData.js';
-
 export const QUEUE_STORAGE_KEY = 'queueme_items_v1';
 
 /**
- * Creates a fresh, deep copy of INITIAL_ITEMS
- * preventing reference mutations from affecting the initial template.
+ * Returns an empty array template for uninitialized queue state
  */
 export function cloneInitialItems() {
-  return JSON.parse(JSON.stringify(INITIAL_ITEMS));
+  return [];
 }
 
 /**
@@ -98,7 +95,7 @@ export function sanitizeQueueItem(item) {
  * Loads stored queue items from localStorage.
  *
  * Safety guarantees:
- * 1. If key is missing, returns status: 'empty' and fresh clone of INITIAL_ITEMS.
+ * 1. If key is missing, returns status: 'empty' and empty items list ([]).
  * 2. If key exists and contains valid JSON array, returns status: 'valid' with parsed items.
  * 3. If key contains malformed JSON or non-array data, returns status: 'corrupted',
  *    preserves the corrupted raw string in localStorage without overwriting it,
@@ -107,7 +104,7 @@ export function sanitizeQueueItem(item) {
 export function loadStoredQueue(storageKey = QUEUE_STORAGE_KEY) {
   if (!isLocalStorageAvailable()) {
     return {
-      items: cloneInitialItems(),
+      items: [],
       status: 'unsupported',
       rawData: null,
       error: new Error('localStorage is not available in this environment.'),
@@ -119,7 +116,7 @@ export function loadStoredQueue(storageKey = QUEUE_STORAGE_KEY) {
     raw = window.localStorage.getItem(storageKey);
   } catch (err) {
     return {
-      items: cloneInitialItems(),
+      items: [],
       status: 'unsupported',
       rawData: null,
       error: err instanceof Error ? err : new Error(String(err)),
@@ -128,14 +125,13 @@ export function loadStoredQueue(storageKey = QUEUE_STORAGE_KEY) {
 
   // Scenario 1: No saved data exists
   if (raw === null) {
-    const initialCopy = cloneInitialItems();
     try {
-      window.localStorage.setItem(storageKey, JSON.stringify(initialCopy));
+      window.localStorage.setItem(storageKey, JSON.stringify([]));
     } catch {
       // Ignore quota error on initial seed
     }
     return {
-      items: initialCopy,
+      items: [],
       status: 'empty',
       rawData: null,
       error: null,
@@ -148,7 +144,19 @@ export function loadStoredQueue(storageKey = QUEUE_STORAGE_KEY) {
     if (!Array.isArray(parsed)) {
       throw new Error('Stored data is not a valid queue array.');
     }
-    const sanitizedItems = parsed.map(sanitizeQueueItem);
+
+    // Filter out any legacy sample items (e.g. qm-1 to qm-15) if present
+    const isSampleId = (id) => /^qm-(?:[1-9]|1[0-5])$/.test(String(id));
+    const nonSampleItems = parsed.filter((item) => !isSampleId(item?.id));
+    if (nonSampleItems.length !== parsed.length) {
+      try {
+        window.localStorage.setItem(storageKey, JSON.stringify(nonSampleItems));
+      } catch {
+        // Ignore quota error
+      }
+    }
+
+    const sanitizedItems = nonSampleItems.map(sanitizeQueueItem);
     return {
       items: sanitizedItems,
       status: 'valid',
@@ -160,7 +168,7 @@ export function loadStoredQueue(storageKey = QUEUE_STORAGE_KEY) {
     // CRITICAL: DO NOT overwrite window.localStorage[storageKey] here!
     // Keep user's recoverable data intact in storage.
     return {
-      items: cloneInitialItems(),
+      items: [],
       status: 'corrupted',
       rawData: raw,
       error: parseError instanceof Error ? parseError : new Error(String(parseError)),
@@ -187,41 +195,4 @@ export function saveStoredQueue(items, storageKey = QUEUE_STORAGE_KEY) {
       error: err instanceof Error ? err : new Error(String(err)),
     };
   }
-}
-
-/**
- * Resets queue items in localStorage to a fresh clone of INITIAL_ITEMS.
- * If raw data already exists, backs it up to a timestamped backup key first
- * for ultimate data safety.
- */
-export function resetStoredQueue(storageKey = QUEUE_STORAGE_KEY) {
-  const freshItems = cloneInitialItems();
-
-  if (isLocalStorageAvailable()) {
-    try {
-      const existingRaw = window.localStorage.getItem(storageKey);
-      if (existingRaw !== null) {
-        // Create emergency recovery backup
-        const backupKey = `${storageKey}_backup_${Date.now()}`;
-        try {
-          window.localStorage.setItem(backupKey, existingRaw);
-        } catch {
-          // If backup fails due to quota, proceed with reset
-        }
-      }
-      window.localStorage.setItem(storageKey, JSON.stringify(freshItems));
-    } catch (err) {
-      return {
-        items: freshItems,
-        success: false,
-        error: err instanceof Error ? err : new Error(String(err)),
-      };
-    }
-  }
-
-  return {
-    items: freshItems,
-    success: true,
-    error: null,
-  };
 }
