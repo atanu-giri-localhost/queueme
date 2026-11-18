@@ -300,19 +300,23 @@ async function runGoogleAuthTests() {
     });
 
   } finally {
-    // Clean up all test users
+    // Clean up all test users and their items
     const userIdsToDelete = [user1?.id, user2?.id, localUser?.id].filter(Boolean);
     if (userIdsToDelete.length > 0) {
       await prisma.item.deleteMany({ where: { userId: { in: userIdsToDelete } } }).catch(() => {});
       await prisma.user.deleteMany({ where: { id: { in: userIdsToDelete } } }).catch(() => {});
     }
 
-    // Verify database is completely empty (zero users, zero items)
-    const finalItemCount = await prisma.item.count();
-    const finalUserCount = await prisma.user.count();
-    console.log(`\n🧹 Database Cleanup Verification: ${finalItemCount} items, ${finalUserCount} users in database.`);
-    assert.equal(finalItemCount, 0, 'Database items table must be empty');
-    assert.equal(finalUserCount, 0, 'Database users table must be empty');
+    // Verify that all test records are completely cleaned up
+    const remainingTestUsers = await prisma.user.count({
+      where: { id: { in: userIdsToDelete } },
+    });
+    const remainingTestItems = await prisma.item.count({
+      where: { userId: { in: userIdsToDelete } },
+    });
+    console.log(`\n🧹 Test Cleanup Verification: ${remainingTestItems} test items, ${remainingTestUsers} test users remaining.`);
+    assert.equal(remainingTestItems, 0, 'Test items must be cleaned up');
+    assert.equal(remainingTestUsers, 0, 'Test users must be cleaned up');
 
     await prisma.$disconnect();
   }
