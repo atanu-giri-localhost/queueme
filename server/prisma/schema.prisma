@@ -43,10 +43,26 @@ model User {
   provider  AuthProvider @default(LOCAL)
   googleId  String?      @unique
   items     Item[]
+  notes     Note[]
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
   @@map("users")
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String   @default("Untitled Note")
+  content   String   @default("") @db.Text
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([pinned])
+  @@map("notes")
 }
 
 model Item {

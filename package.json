@@ -18,8 +18,9 @@
     "prisma:deploy": "npm --prefix server run prisma:deploy",
     "prisma:seed": "npm --prefix server run prisma:seed",
     "prisma:studio": "npm --prefix server run prisma:studio",
-    "test": "npm --prefix server run test && npm --prefix server run test:google",
+    "test": "npm --prefix server run test && npm --prefix server run test:google && npm --prefix server run test:notes",
     "test:google": "npm --prefix server run test:google",
+    "test:notes": "npm --prefix server run test:notes",
     "test:backend": "npm --prefix server run test",
     "test:persistence": "node server/test/persistence.test.js",
     "lint": "eslint ."

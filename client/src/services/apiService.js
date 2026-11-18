@@ -232,6 +232,64 @@ export const apiService = {
       method: 'DELETE',
     });
   },
+
+  // ==========================================
+  // Note Endpoints
+  // ==========================================
+
+  /**
+   * Fetch all notes with optional search query
+   */
+  async fetchNotes(search = '') {
+    const query = search ? `?search=${encodeURIComponent(search)}` : '';
+    const res = await apiRequest(`/notes${query}`);
+    return res?.data || [];
+  },
+
+  /**
+   * Fetch single note by ID
+   */
+  async getNoteById(id) {
+    const res = await apiRequest(`/notes/${encodeURIComponent(id)}`);
+    return res?.data;
+  },
+
+  /**
+   * Create new note (POST)
+   */
+  async createNote(noteData) {
+    const res = await apiRequest('/notes', {
+      method: 'POST',
+      body: JSON.stringify(noteData),
+    });
+    return res?.data;
+  },
+
+  /**
+   * Update existing note (PATCH)
+   */
+  async updateNote(id, noteData) {
+    const payload = { ...noteData };
+    delete payload.id;
+    delete payload.userId;
+    delete payload.createdAt;
+    delete payload.updatedAt;
+
+    const res = await apiRequest(`/notes/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    });
+    return res?.data;
+  },
+
+  /**
+   * Delete note by ID
+   */
+  async deleteNote(id) {
+    return apiRequest(`/notes/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+  },
 };
 
 export default apiService;

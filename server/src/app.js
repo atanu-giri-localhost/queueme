@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import authRouter from './routes/auth.js';
 import itemsRouter from './routes/items.js';
+import notesRouter from './routes/notes.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
 export function createApp() {
@@ -64,6 +65,9 @@ export function createApp() {
 
   // Items API routes
   app.use('/api/items', itemsRouter);
+
+  // Notes API routes
+  app.use('/api/notes', notesRouter);
 
   // 404 handler for unknown routes
   app.use((req, res) => {

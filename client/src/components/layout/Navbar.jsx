@@ -73,11 +73,17 @@ export default function Navbar({
           <span className="text-zinc-500 font-medium">Workspace</span>
           <span className="text-zinc-600">/</span>
           <span className="text-zinc-200 font-semibold capitalize">
-            {currentView === 'dashboard' ? 'Personal Dashboard' : 'Queue Backlog'}
+            {currentView === 'dashboard'
+              ? 'Personal Dashboard'
+              : currentView === 'notepad'
+              ? 'Notepad & Scratchpad'
+              : 'Queue Backlog'}
           </span>
-          <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700/60 font-mono">
-            {counts.total} items
-          </span>
+          {currentView !== 'notepad' && (
+            <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700/60 font-mono">
+              {counts.total} items
+            </span>
+          )}
         </div>
       </div>
 

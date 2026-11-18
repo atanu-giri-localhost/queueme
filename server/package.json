@@ -14,6 +14,7 @@
     "dev": "node --watch src/index.js",
     "test": "node test/api.test.js",
     "test:google": "node test/google_auth.test.js",
+    "test:notes": "node test/notes.test.js",
     "test:persistence": "node test/persistence.test.js"
   },
   "engines": {

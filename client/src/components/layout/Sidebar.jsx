@@ -7,6 +7,7 @@ import {
   Flame,
   LogOut,
   LogIn,
+  FileText,
 } from 'lucide-react';
 import TypeIcon from '../common/TypeIcon';
 import logoIcon from '../../assets/queueme-icon.svg';
@@ -72,6 +73,15 @@ export default function Sidebar({
         setCurrentView('queue');
         setStatusFilter('completed');
         setSelectedCategory('all');
+      },
+    },
+    {
+      id: 'notepad',
+      label: 'Notepad',
+      icon: FileText,
+      active: currentView === 'notepad',
+      onClick: () => {
+        setCurrentView('notepad');
       },
     },
   ];

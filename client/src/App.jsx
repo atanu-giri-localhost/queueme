@@ -20,6 +20,7 @@ import ItemListItem from './components/items/ItemListItem';
 import ItemDetailModal from './components/items/ItemDetailModal';
 import AddItemModal from './components/items/AddItemModal';
 import AuthModal from './components/auth/AuthModal';
+import NotepadView from './components/notepad/NotepadView';
 import Button from './components/common/Button';
 import KeyboardShortcutsOverlay from './components/common/KeyboardShortcutsOverlay';
 import useAuth from './hooks/useAuth';
@@ -352,10 +353,13 @@ export default function App() {
           </div>
         )}
 
-        {/* Scrollable View Container */}
-        <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
-          {/* DASHBOARD VIEW */}
-          {currentView === 'dashboard' && (
+        {/* View Container */}
+        {currentView === 'notepad' ? (
+          <NotepadView onOpenAuth={handleOpenAuth} />
+        ) : (
+          <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+            {/* DASHBOARD VIEW */}
+            {currentView === 'dashboard' && (
             <div className="space-y-8 max-w-7xl mx-auto">
               {/* Productivity Welcome Banner */}
               <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-950/70 via-zinc-900/90 to-zinc-900/80 border border-indigo-500/20 p-6 sm:p-8 backdrop-blur-md shadow-xl">
@@ -613,6 +617,7 @@ export default function App() {
             </div>
           )}
         </main>
+      )}
       </div>
 
       {/* Item Details Modal */}
