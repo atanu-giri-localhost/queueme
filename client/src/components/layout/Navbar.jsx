@@ -9,11 +9,13 @@ import {
 } from 'lucide-react';
 import Button from '../common/Button';
 import logoIcon from '../../assets/queueme-icon.svg';
+import useAuth from '../../hooks/useAuth';
 
 export default function Navbar({
   onOpenMobileNav,
   onOpenAddItem,
   onOpenShortcuts,
+  onOpenAuth,
   searchQuery,
   setSearchQuery,
   viewMode,
@@ -21,6 +23,7 @@ export default function Navbar({
   currentView,
   counts,
 }) {
+  const { isAuthenticated } = useAuth();
   // Support "/" key to quickly focus the search input
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -144,12 +147,41 @@ export default function Navbar({
           <kbd className="text-[10px] font-mono">?</kbd>
         </button>
 
+        {/* Sign In & Sign Up buttons for unauthenticated users */}
+        {!isAuthenticated && (
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Button
+              id="navbar-signin-btn"
+              variant="ghost"
+              size="sm"
+              onClick={() => onOpenAuth && onOpenAuth('login')}
+            >
+              Sign In
+            </Button>
+            <Button
+              id="navbar-signup-btn"
+              variant="secondary"
+              size="sm"
+              onClick={() => onOpenAuth && onOpenAuth('register')}
+              className="text-indigo-400 border-indigo-500/30 hover:border-indigo-500/50"
+            >
+              Sign Up
+            </Button>
+          </div>
+        )}
+
         {/* Add Item CTA Button */}
         <Button
           id="open-add-item-modal-btn"
           variant="primary"
           size="sm"
-          onClick={onOpenAddItem}
+          onClick={() => {
+            if (!isAuthenticated) {
+              if (onOpenAuth) onOpenAuth();
+            } else {
+              onOpenAddItem();
+            }
+          }}
           icon={Plus}
         >
           <span className="hidden sm:inline">Add to Queue</span>

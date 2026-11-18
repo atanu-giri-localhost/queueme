@@ -272,15 +272,19 @@ Base URL: `http://localhost:5000/api`
 
 ### Endpoints
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/health` | Service health status, uptime, and timestamp |
-| `GET` | `/api/items` | List items with search, filters, and sorting |
-| `GET` | `/api/items/:id` | Retrieve single item by ID |
-| `POST` | `/api/items` | Create new item with Zod validation |
-| `PATCH` | `/api/items/:id` | Update item fields (auto-syncs status & progress, preserves unmentioned fields) |
-| `PUT` | `/api/items/:id` | Replace / full update item fields |
-| `DELETE` | `/api/items/:id` | Delete item by ID |
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/health` | Service health status, uptime, and timestamp | No |
+| `POST` | `/api/auth/register` | Register new user with email & password | No |
+| `POST` | `/api/auth/login` | Authenticate with email & password | No |
+| `POST` | `/api/auth/google` | 1-Click login / register via Google OAuth | No |
+| `GET` | `/api/auth/me` | Retrieve profile of authenticated user | Yes |
+| `GET` | `/api/items` | List user items with search, filters, and sorting | Yes |
+| `GET` | `/api/items/:id` | Retrieve single item by ID | Yes |
+| `POST` | `/api/items` | Create new item attached to authenticated user | Yes |
+| `PATCH` | `/api/items/:id` | Update item fields (scoped to owner) | Yes |
+| `PUT` | `/api/items/:id` | Replace / full update item fields (scoped to owner) | Yes |
+| `DELETE` | `/api/items/:id` | Delete item by ID (scoped to owner) | Yes |
 
 ---
 

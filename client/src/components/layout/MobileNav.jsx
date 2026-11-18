@@ -5,9 +5,12 @@ import {
   Layers,
   Flame,
   CheckCircle2,
+  LogOut,
+  LogIn,
 } from 'lucide-react';
 import TypeIcon from '../common/TypeIcon';
 import logoIcon from '../../assets/queueme-icon.svg';
+import useAuth from '../../hooks/useAuth';
 
 export default function MobileNav({
   isOpen,
@@ -19,7 +22,9 @@ export default function MobileNav({
   statusFilter,
   setStatusFilter,
   counts,
+  onOpenAuth,
 }) {
+  const { user, isAuthenticated, logout } = useAuth();
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -210,15 +215,64 @@ export default function MobileNav({
 
         {/* User Info */}
         <div className="pt-4 border-t border-zinc-800/80 space-y-3">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center font-bold text-xs text-zinc-950">
-              AC
+          {isAuthenticated && user ? (
+            <div className="flex items-center justify-between gap-3 p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/60">
+              <div className="flex items-center gap-3 min-w-0">
+                {user.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.name || 'User avatar'}
+                    className="w-9 h-9 rounded-full object-cover shrink-0 ring-1 ring-zinc-700"
+                  />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center font-bold text-xs text-white shrink-0">
+                    {(user.name || user.email || 'U')[0].toUpperCase()}
+                  </div>
+                )}
+                <div className="flex flex-col min-w-0">
+                  <span className="text-xs font-semibold text-zinc-200 truncate">
+                    {user.name || user.email.split('@')[0]}
+                  </span>
+                  <span className="text-[11px] text-zinc-500 truncate">{user.email}</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  logout();
+                  onClose();
+                }}
+                title="Sign out"
+                className="p-2 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-zinc-800/80 transition-colors cursor-pointer"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
             </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold text-zinc-200">Atanu Giri</span>
-              <span className="text-[11px] text-zinc-500">Free Tier Backlog</span>
+          ) : (
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  if (onOpenAuth) onOpenAuth('register');
+                }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md transition-colors cursor-pointer"
+              >
+                <span>Create Free Account</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  if (onOpenAuth) onOpenAuth('login');
+                }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-medium text-zinc-300 hover:text-white bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 transition-colors cursor-pointer"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                <span>Sign In</span>
+              </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

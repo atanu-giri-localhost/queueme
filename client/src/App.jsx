@@ -19,10 +19,13 @@ import ItemCard from './components/items/ItemCard';
 import ItemListItem from './components/items/ItemListItem';
 import ItemDetailModal from './components/items/ItemDetailModal';
 import AddItemModal from './components/items/AddItemModal';
+import AuthModal from './components/auth/AuthModal';
 import Button from './components/common/Button';
 import KeyboardShortcutsOverlay from './components/common/KeyboardShortcutsOverlay';
+import useAuth from './hooks/useAuth';
 
 export default function App() {
+  const { user, isAuthenticated } = useAuth();
   const {
     items,
     setItems,
@@ -33,8 +36,15 @@ export default function App() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState('login');
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleOpenAuth = (mode = 'login') => {
+    setAuthModalMode(mode);
+    setIsAuthModalOpen(true);
+  };
 
   // Filters & Search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -233,8 +243,12 @@ export default function App() {
         case 'n':
         case 'N':
           e.preventDefault();
-          if (!selectedItem && !isAddModalOpen) {
-            setIsAddModalOpen(true);
+          if (!selectedItem && !isAddModalOpen && !isAuthModalOpen) {
+            if (!isAuthenticated) {
+              setIsAuthModalOpen(true);
+            } else {
+              setIsAddModalOpen(true);
+            }
           }
           break;
         case '1':
@@ -266,7 +280,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleGlobalKey);
     return () => window.removeEventListener('keydown', handleGlobalKey);
-  }, [isTypingInField, selectedItem, isAddModalOpen]);
+  }, [isTypingInField, selectedItem, isAddModalOpen, isAuthModalOpen, isAuthenticated]);
 
   return (
     <div className="flex h-screen w-full bg-zinc-950 text-zinc-100 overflow-hidden font-sans">
@@ -281,6 +295,7 @@ export default function App() {
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
         counts={counts}
+        onOpenAuth={handleOpenAuth}
       />
 
       {/* Mobile Drawer Navigation */}
@@ -294,6 +309,7 @@ export default function App() {
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
         counts={counts}
+        onOpenAuth={handleOpenAuth}
       />
 
       {/* Main Content Area */}
@@ -303,6 +319,7 @@ export default function App() {
           onOpenMobileNav={() => setIsMobileNavOpen(true)}
           onOpenAddItem={() => setIsAddModalOpen(true)}
           onOpenShortcuts={() => setIsShortcutsOpen(true)}
+          onOpenAuth={handleOpenAuth}
           searchQuery={searchQuery}
           setSearchQuery={(query) => {
             setSearchQuery(query);
@@ -353,18 +370,44 @@ export default function App() {
                       <span>Backlog & Reading Hub</span>
                     </div>
                     <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                      Ready to dive in, Alex?
+                      {user?.name ? `Ready to dive in, ${user.name.split(' ')[0]}?` : 'Ready to dive in?'}
                     </h1>
                     <p className="text-sm text-zinc-400 max-w-xl leading-relaxed">
-                      You have <span className="text-indigo-400 font-semibold">{counts.in_progress} items in progress</span> and{' '}
-                      <span className="text-zinc-200 font-semibold">{counts.queued} pending items</span> in your personal queue.
+                      {isAuthenticated ? (
+                        <>
+                          You have <span className="text-indigo-400 font-semibold">{counts.in_progress} items in progress</span> and{' '}
+                          <span className="text-zinc-200 font-semibold">{counts.queued} pending items</span> in your personal queue.
+                        </>
+                      ) : (
+                        'Sign in to synchronize and access your personal watchlist, books, and articles across devices.'
+                      )}
                     </p>
                   </div>
 
                   <div className="flex items-center gap-3">
+                    {!isAuthenticated && (
+                      <>
+                        <Button
+                          id="dashboard-signup-cta-btn"
+                          variant="primary"
+                          size="md"
+                          onClick={() => handleOpenAuth('register')}
+                        >
+                          Sign Up Free
+                        </Button>
+                        <Button
+                          id="dashboard-signin-cta-btn"
+                          variant="secondary"
+                          size="md"
+                          onClick={() => handleOpenAuth('login')}
+                        >
+                          Sign In
+                        </Button>
+                      </>
+                    )}
                     <Button
                       id="dashboard-explore-queue-btn"
-                      variant="secondary"
+                      variant={isAuthenticated ? 'secondary' : 'ghost'}
                       size="md"
                       onClick={() => setCurrentView('queue')}
                       iconRight={ArrowRight}
@@ -373,9 +416,15 @@ export default function App() {
                     </Button>
                     <Button
                       id="dashboard-add-item-btn"
-                      variant="primary"
+                      variant={isAuthenticated ? 'primary' : 'secondary'}
                       size="md"
-                      onClick={() => setIsAddModalOpen(true)}
+                      onClick={() => {
+                        if (!isAuthenticated) {
+                          handleOpenAuth('register');
+                        } else {
+                          setIsAddModalOpen(true);
+                        }
+                      }}
                       icon={Plus}
                     >
                       Add Item
@@ -585,6 +634,13 @@ export default function App() {
         onAddItem={handleAddItem}
       />
 
+      {/* Authentication Modal */}
+      <AuthModal
+        key={authModalMode}
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        initialMode={authModalMode}
+      />
 
       {/* Keyboard Shortcuts Help Overlay — press ? to open */}
       <KeyboardShortcutsOverlay

@@ -6,6 +6,7 @@ import {
   sanitizeQueueItem,
 } from '../services/storageService.js';
 import apiService from '../services/apiService.js';
+import useAuth from './useAuth.js';
 
 /**
  * Reusable hook for QueueMe items persistence.
@@ -17,18 +18,24 @@ import apiService from '../services/apiService.js';
  * - Optimistic local updates for snappy 0ms UI latency, with background PostgreSQL synchronization.
  */
 export function useQueueStorage(storageKey = QUEUE_STORAGE_KEY) {
+  const { token } = useAuth();
+
   // Lazy initial state from LocalStorage for instant render without layout shift
   const [initResult] = useState(() => loadStoredQueue(storageKey));
-  const [items, setItemsState] = useState(() => initResult.items);
-  const [storageStatus, setStorageStatus] = useState(() =>
-    initResult.status === 'corrupted' ? 'corrupted' : 'loading'
-  );
-  const [storageError, setStorageError] = useState(() => initResult.error);
-  const [corruptedRawData, setCorruptedRawData] = useState(() => initResult.rawData);
+  const [items, setItemsState] = useState(() => (token ? initResult.items : []));
+  const [storageStatus, setStorageStatus] = useState('valid');
+  const [storageError, setStorageError] = useState(null);
+  const [corruptedRawData, setCorruptedRawData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initial load from PostgreSQL API with unmount safety
+  // Load from PostgreSQL API with unmount safety
   const reloadItems = useCallback(async () => {
+    if (!token) {
+      setItemsState([]);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const remoteItems = await apiService.fetchItems();
       setItemsState(remoteItems);
@@ -37,17 +44,24 @@ export function useQueueStorage(storageKey = QUEUE_STORAGE_KEY) {
       saveStoredQueue(remoteItems, storageKey);
     } catch (err) {
       console.warn('QueueMe API fetch failed, falling back to LocalStorage cache:', err.message);
-      setStorageStatus(initResult.status === 'corrupted' ? 'corrupted' : 'fallback');
+      setStorageStatus('fallback');
       setStorageError(err.message || 'API unavailable, using local cache');
     } finally {
       setIsLoading(false);
     }
-  }, [initResult.status, storageKey]);
+  }, [token, storageKey]);
 
   useEffect(() => {
     let isCancelled = false;
 
     async function fetchInitialQueue() {
+      if (!token) {
+        setItemsState([]);
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
       try {
         const remoteItems = await apiService.fetchItems();
         if (!isCancelled) {
@@ -60,7 +74,7 @@ export function useQueueStorage(storageKey = QUEUE_STORAGE_KEY) {
       } catch (err) {
         if (!isCancelled) {
           console.warn('QueueMe API fetch failed, falling back to LocalStorage cache:', err.message);
-          setStorageStatus(initResult.status === 'corrupted' ? 'corrupted' : 'fallback');
+          setStorageStatus('fallback');
           setStorageError(err.message || 'API unavailable, using local cache');
           setIsLoading(false);
         }
@@ -72,7 +86,7 @@ export function useQueueStorage(storageKey = QUEUE_STORAGE_KEY) {
     return () => {
       isCancelled = true;
     };
-  }, [initResult.status, storageKey]);
+  }, [token, storageKey]);
 
   // Synchronize across browser tabs
   useEffect(() => {
@@ -101,6 +115,8 @@ export function useQueueStorage(storageKey = QUEUE_STORAGE_KEY) {
    */
   const syncWithApi = useCallback(
     async (prevList, nextList) => {
+      if (!token) return;
+
       // 1. Check for item addition
       if (nextList.length > prevList.length) {
         const prevIds = new Set(prevList.map((i) => i.id));
@@ -164,7 +180,7 @@ export function useQueueStorage(storageKey = QUEUE_STORAGE_KEY) {
         }
       }
     },
-    []
+    [token]
   );
 
   /**

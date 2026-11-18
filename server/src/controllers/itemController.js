@@ -2,13 +2,15 @@ import prisma from '../prisma.js';
 
 /**
  * GET /api/items
- * Retrieve all items with optional filtering and sorting
+ * Retrieve all items belonging to the authenticated user with optional filtering and sorting
  */
 export async function getItems(req, res, next) {
   try {
     const { type, status, priority, search, sortBy } = req.validatedQuery || {};
 
-    const where = {};
+    const where = {
+      userId: req.userId,
+    };
 
     if (type && type !== 'all') {
       where.type = type;
@@ -34,11 +36,15 @@ export async function getItems(req, res, next) {
           };
         }
       } else {
-        where.OR = [
-          { title: { contains: cleanTerm, mode: 'insensitive' } },
-          { creator: { contains: cleanTerm, mode: 'insensitive' } },
-          { platform: { contains: cleanTerm, mode: 'insensitive' } },
-          { tags: { has: cleanTerm } },
+        where.AND = [
+          {
+            OR: [
+              { title: { contains: cleanTerm, mode: 'insensitive' } },
+              { creator: { contains: cleanTerm, mode: 'insensitive' } },
+              { platform: { contains: cleanTerm, mode: 'insensitive' } },
+              { tags: { has: cleanTerm } },
+            ],
+          },
         ];
       }
     }
@@ -49,10 +55,8 @@ export async function getItems(req, res, next) {
     } else if (sortBy === 'progress') {
       orderBy = [{ progress: 'desc' }, { title: 'asc' }];
     } else if (sortBy === 'priority') {
-      // In PostgreSQL enum priority is high, medium, low
       orderBy = [{ priority: 'asc' }, { createdAt: 'desc' }];
     } else {
-      // default: recent
       orderBy = [{ addedDate: 'desc' }, { createdAt: 'desc' }];
     }
 
@@ -73,13 +77,16 @@ export async function getItems(req, res, next) {
 
 /**
  * GET /api/items/:id
- * Retrieve a single item by id
+ * Retrieve a single item by id belonging to the authenticated user
  */
 export async function getItemById(req, res, next) {
   try {
     const { id } = req.params;
-    const item = await prisma.item.findUnique({
-      where: { id },
+    const item = await prisma.item.findFirst({
+      where: {
+        id,
+        userId: req.userId,
+      },
     });
 
     if (!item) {
@@ -100,11 +107,11 @@ export async function getItemById(req, res, next) {
 
 /**
  * POST /api/items
- * Create a new queue item
+ * Create a new queue item attached to the authenticated user
  */
 export async function createItem(req, res, next) {
   try {
-    const payload = { ...req.validatedBody };
+    const payload = { ...req.validatedBody, userId: req.userId };
 
     if (!payload.addedDate) {
       payload.addedDate = new Date().toISOString().split('T')[0];
@@ -125,14 +132,17 @@ export async function createItem(req, res, next) {
 
 /**
  * PATCH /api/items/:id
- * Update an existing item
+ * Update an existing item belonging to the authenticated user
  */
 export async function updateItem(req, res, next) {
   try {
     const { id } = req.params;
 
-    const existing = await prisma.item.findUnique({
-      where: { id },
+    const existing = await prisma.item.findFirst({
+      where: {
+        id,
+        userId: req.userId,
+      },
     });
 
     if (!existing) {
@@ -158,14 +168,17 @@ export async function updateItem(req, res, next) {
 
 /**
  * DELETE /api/items/:id
- * Delete an item by id
+ * Delete an item belonging to the authenticated user
  */
 export async function deleteItem(req, res, next) {
   try {
     const { id } = req.params;
 
-    const existing = await prisma.item.findUnique({
-      where: { id },
+    const existing = await prisma.item.findFirst({
+      where: {
+        id,
+        userId: req.userId,
+      },
     });
 
     if (!existing) {

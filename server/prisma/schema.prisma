@@ -8,6 +8,11 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+}
+
 enum MediaType {
   movie
   video
@@ -29,8 +34,25 @@ enum ItemPriority {
   low
 }
 
+model User {
+  id        String       @id @default(cuid())
+  email     String       @unique
+  password  String?      // Nullable for Google OAuth users, hashed for Email users
+  name      String?
+  avatarUrl String?
+  provider  AuthProvider @default(LOCAL)
+  googleId  String?      @unique
+  items     Item[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@map("users")
+}
+
 model Item {
   id            String       @id @default(cuid())
+  userId        String
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   title         String
   type          MediaType
   creator       String       @default("")
@@ -51,6 +73,7 @@ model Item {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
+  @@index([userId])
   @@index([status])
   @@index([type])
   @@index([priority])

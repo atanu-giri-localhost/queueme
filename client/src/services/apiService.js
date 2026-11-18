@@ -1,5 +1,21 @@
 import { sanitizeQueueItem } from './storageService.js';
 
+export const AUTH_TOKEN_KEY = 'queueme_auth_token';
+
+export function getStoredToken() {
+  if (typeof window === 'undefined') return null;
+  return window.localStorage.getItem(AUTH_TOKEN_KEY);
+}
+
+export function setStoredToken(token) {
+  if (typeof window === 'undefined') return;
+  if (token) {
+    window.localStorage.setItem(AUTH_TOKEN_KEY, token);
+  } else {
+    window.localStorage.removeItem(AUTH_TOKEN_KEY);
+  }
+}
+
 export function getApiBaseUrl() {
   let envUrl =
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
@@ -40,7 +56,7 @@ export class ApiError extends Error {
 }
 
 /**
- * Fetch wrapper with timeout and error extraction
+ * Fetch wrapper with timeout, token injection, and error extraction
  */
 async function apiRequest(endpoint, options = {}) {
   const baseUrl = getApiBaseUrl();
@@ -48,12 +64,16 @@ async function apiRequest(endpoint, options = {}) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), options.timeoutMs || DEFAULT_TIMEOUT_MS);
 
+  const token = getStoredToken();
+  const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+
   const config = {
     ...options,
     signal: controller.signal,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      ...authHeader,
       ...options.headers,
     },
   };
@@ -67,6 +87,11 @@ async function apiRequest(endpoint, options = {}) {
     const data = isJson ? await res.json() : await res.text();
 
     if (!res.ok) {
+      // If unauthorized, clear invalid token
+      if (res.status === 401 && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/register')) {
+        setStoredToken(null);
+      }
+
       const errorMessage =
         (typeof data === 'object' && data?.error) ||
         (typeof data === 'object' && data?.message) ||
@@ -98,6 +123,49 @@ export const apiService = {
   async checkHealth() {
     return apiRequest('/health', { timeoutMs: 3000 });
   },
+
+  // ==========================================
+  // Authentication Endpoints
+  // ==========================================
+
+  async login(email, password) {
+    const res = await apiRequest('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+    if (res.token) setStoredToken(res.token);
+    return res;
+  },
+
+  async register(email, password, name) {
+    const res = await apiRequest('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ email, password, name }),
+    });
+    if (res.token) setStoredToken(res.token);
+    return res;
+  },
+
+  async googleAuth(credential) {
+    const res = await apiRequest('/auth/google', {
+      method: 'POST',
+      body: JSON.stringify({ credential }),
+    });
+    if (res.token) setStoredToken(res.token);
+    return res;
+  },
+
+  async getMe() {
+    return apiRequest('/auth/me');
+  },
+
+  logout() {
+    setStoredToken(null);
+  },
+
+  // ==========================================
+  // Queue Item Endpoints
+  // ==========================================
 
   /**
    * Fetch all items with optional filters
@@ -132,7 +200,6 @@ export const apiService = {
    */
   async createItem(itemData) {
     const payload = sanitizeQueueItem({ ...itemData });
-    // Remove null or undefined fields that Prisma does not need
     const response = await apiRequest('/items', {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -146,6 +213,7 @@ export const apiService = {
   async updateItem(id, itemData) {
     const payload = { ...itemData };
     delete payload.id; // ID cannot be updated
+    delete payload.userId;
     delete payload.createdAt;
     delete payload.updatedAt;
 

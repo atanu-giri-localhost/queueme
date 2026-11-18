@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import authRouter from './routes/auth.js';
 import itemsRouter from './routes/items.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
@@ -57,6 +58,9 @@ export function createApp() {
 
   app.get('/api/health', handleHealth);
   app.get('/health', handleHealth);
+
+  // Auth API routes
+  app.use('/api/auth', authRouter);
 
   // Items API routes
   app.use('/api/items', itemsRouter);

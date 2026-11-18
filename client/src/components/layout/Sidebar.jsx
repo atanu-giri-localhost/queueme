@@ -5,9 +5,12 @@ import {
   ChevronLeft,
   ChevronRight,
   Flame,
+  LogOut,
+  LogIn,
 } from 'lucide-react';
 import TypeIcon from '../common/TypeIcon';
 import logoIcon from '../../assets/queueme-icon.svg';
+import useAuth from '../../hooks/useAuth';
 
 export default function Sidebar({
   isCollapsed,
@@ -19,7 +22,9 @@ export default function Sidebar({
   statusFilter,
   setStatusFilter,
   counts,
+  onOpenAuth,
 }) {
+  const { user, isAuthenticated, logout } = useAuth();
   const mainNavItems = [
     {
       id: 'dashboard',
@@ -233,21 +238,56 @@ export default function Sidebar({
 
       {/* User Footer */}
       <div className="p-3 border-t border-zinc-800/60 bg-zinc-950/60 space-y-2">
-        <div
-          className={`flex items-center gap-3 p-2 rounded-xl hover:bg-zinc-900/80 border border-zinc-800/40 transition-colors ${
-            isCollapsed ? 'justify-center p-1.5' : ''
-          }`}
-        >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center font-bold text-xs text-zinc-950 shrink-0 shadow">
-            AC
+        {isAuthenticated && user ? (
+          <div
+            className={`flex items-center gap-2.5 p-2 rounded-xl bg-zinc-900/40 border border-zinc-800/40 ${
+              isCollapsed ? 'justify-center p-1.5' : ''
+            }`}
+          >
+            {user.avatarUrl ? (
+              <img
+                src={user.avatarUrl}
+                alt={user.name || 'User avatar'}
+                className="w-8 h-8 rounded-full object-cover shrink-0 ring-1 ring-zinc-700/60"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center font-bold text-xs text-white shrink-0 shadow">
+                {(user.name || user.email || 'U')[0].toUpperCase()}
+              </div>
+            )}
+
+            {!isCollapsed && (
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-xs font-semibold text-zinc-200 truncate">
+                  {user.name || user.email.split('@')[0]}
+                </span>
+                <span className="text-[11px] text-zinc-500 truncate">{user.email}</span>
+              </div>
+            )}
+
+            {!isCollapsed && (
+              <button
+                type="button"
+                onClick={logout}
+                title="Sign out"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-zinc-800/80 transition-colors cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
-          {!isCollapsed && (
-            <div className="flex flex-col min-w-0 flex-1">
-              <span className="text-xs font-semibold text-zinc-200 truncate">Atanu Giri</span>
-              <span className="text-[11px] text-zinc-500 truncate">Productivity Curator</span>
-            </div>
-          )}
-        </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => onOpenAuth && onOpenAuth('login')}
+            className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 transition-colors cursor-pointer ${
+              isCollapsed ? 'justify-center px-1.5' : ''
+            }`}
+          >
+            <LogIn className="w-3.5 h-3.5 shrink-0" />
+            {!isCollapsed && <span>Sign In / Sign Up</span>}
+          </button>
+        )}
       </div>
     </aside>
   );

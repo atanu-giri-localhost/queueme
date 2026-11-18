@@ -13,8 +13,12 @@ import {
   validateBody,
   validateQuery,
 } from '../validators/itemValidator.js';
+import { requireAuth } from '../middlewares/auth.js';
 
 const router = Router();
+
+// Protect all item routes with authentication
+router.use(requireAuth);
 
 // List items with filters, sorting, and search
 router.get('/', validateQuery(queryParamsSchema), getItems);

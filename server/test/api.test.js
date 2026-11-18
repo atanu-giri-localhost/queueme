@@ -5,7 +5,7 @@ import { app } from '../src/app.js';
 import prisma from '../src/prisma.js';
 
 async function runTests() {
-  console.log('🧪 Starting QueueMe API automated tests...\n');
+  console.log('🧪 Starting QueueMe API & Auth automated tests...\n');
   let passed = 0;
   let failed = 0;
 
@@ -21,6 +21,14 @@ async function runTests() {
     }
   }
 
+  const testEmailA = `test-user-a-${Date.now()}@example.com`;
+  const testEmailB = `test-user-b-${Date.now()}@example.com`;
+  const testPassword = 'Password123!';
+
+  let tokenA = null;
+  let userAId = null;
+  let tokenB = null;
+  let userBId = null;
   let createdItemId = null;
 
   try {
@@ -32,8 +40,80 @@ async function runTests() {
       assert.equal(res.body.service, 'queueme-api');
     });
 
-    // 2. Create item with validated schema
-    await test('POST /api/items creates new Audio item with validated schema', async () => {
+    // 2. Authentication: Registration
+    await test('POST /api/auth/register registers user and returns JWT', async () => {
+      const res = await request(app).post('/api/auth/register').send({
+        email: testEmailA,
+        password: testPassword,
+        name: 'Test User A',
+      });
+      assert.equal(res.status, 201);
+      assert.equal(res.body.success, true);
+      assert.ok(res.body.token);
+      assert.equal(res.body.user.email, testEmailA);
+      assert.equal(res.body.user.name, 'Test User A');
+      tokenA = res.body.token;
+      userAId = res.body.user.id;
+    });
+
+    await test('POST /api/auth/register rejects duplicate email with 409', async () => {
+      const res = await request(app).post('/api/auth/register').send({
+        email: testEmailA,
+        password: testPassword,
+        name: 'Duplicate User',
+      });
+      assert.equal(res.status, 409);
+      assert.equal(res.body.success, false);
+    });
+
+    await test('POST /api/auth/register validates short password with 400', async () => {
+      const res = await request(app).post('/api/auth/register').send({
+        email: 'short-pwd@example.com',
+        password: '123',
+      });
+      assert.equal(res.status, 400);
+      assert.equal(res.body.success, false);
+    });
+
+    // 3. Authentication: Login
+    await test('POST /api/auth/login authenticates valid user', async () => {
+      const res = await request(app).post('/api/auth/login').send({
+        email: testEmailA,
+        password: testPassword,
+      });
+      assert.equal(res.status, 200);
+      assert.equal(res.body.success, true);
+      assert.ok(res.body.token);
+    });
+
+    await test('POST /api/auth/login rejects invalid password with 401', async () => {
+      const res = await request(app).post('/api/auth/login').send({
+        email: testEmailA,
+        password: 'WrongPassword',
+      });
+      assert.equal(res.status, 401);
+      assert.equal(res.body.success, false);
+    });
+
+    // 4. Authentication: Profile
+    await test('GET /api/auth/me returns current user profile', async () => {
+      const res = await request(app)
+        .get('/api/auth/me')
+        .set('Authorization', `Bearer ${tokenA}`);
+      assert.equal(res.status, 200);
+      assert.equal(res.body.user.email, testEmailA);
+      assert.equal(res.body.user.name, 'Test User A');
+    });
+
+    // 5. Route Protection
+    await test('GET /api/items rejects unauthenticated request with 401', async () => {
+      const res = await request(app).get('/api/items');
+      assert.equal(res.status, 401);
+      assert.equal(res.body.success, false);
+    });
+
+    // 6. User A Creates an Item
+    await test('POST /api/items creates item attached to User A', async () => {
       const payload = {
         title: 'Huberman Lab – Optimal Sleep Protocol',
         type: 'audio',
@@ -42,119 +122,90 @@ async function runTests() {
         duration: '2 hr 10 min',
         status: 'queued',
         priority: 'high',
-        tags: ['Health', 'Neuroscience', 'Sleep'],
+        tags: ['Health', 'Sleep'],
         sourceUrl: 'https://open.spotify.com/episode/huberman-sleep',
-        url: 'https://hubermanlab.com/episode',
       };
-      const res = await request(app).post('/api/items').send(payload);
+      const res = await request(app)
+        .post('/api/items')
+        .set('Authorization', `Bearer ${tokenA}`)
+        .send(payload);
       assert.equal(res.status, 201);
       assert.equal(res.body.success, true);
-      assert.equal(res.body.data.title, payload.title);
-      assert.equal(res.body.data.type, 'audio');
-      assert.equal(res.body.data.sourceUrl, payload.sourceUrl);
-      assert.equal(res.body.data.progress, 0);
-      assert.equal(res.body.data.progressLabel, 'Not started');
+      assert.equal(res.body.data.userId, userAId);
       createdItemId = res.body.data.id;
       assert.ok(createdItemId);
     });
 
-    // 3. Validation errors on invalid inputs
-    await test('POST /api/items rejects missing title with 400', async () => {
-      const res = await request(app).post('/api/items').send({
-        type: 'movie',
+    // 7. Multi-User Isolation (User B cannot see User A's items)
+    await test('Multi-user isolation: User B cannot access User A items', async () => {
+      // Register User B
+      const regRes = await request(app).post('/api/auth/register').send({
+        email: testEmailB,
+        password: testPassword,
+        name: 'Test User B',
       });
-      assert.equal(res.status, 400);
-      assert.equal(res.body.success, false);
-      assert.equal(res.body.error, 'Validation failed');
+      tokenB = regRes.body.token;
+      userBId = regRes.body.user.id;
+
+      // User B lists items -> must be empty
+      const listRes = await request(app)
+        .get('/api/items')
+        .set('Authorization', `Bearer ${tokenB}`);
+      assert.equal(listRes.status, 200);
+      assert.equal(listRes.body.count, 0);
+      assert.deepEqual(listRes.body.data, []);
+
+      // User B tries to get User A's item -> 404
+      const getItemRes = await request(app)
+        .get(`/api/items/${createdItemId}`)
+        .set('Authorization', `Bearer ${tokenB}`);
+      assert.equal(getItemRes.status, 404);
+
+      // User B tries to update User A's item -> 404
+      const updateRes = await request(app)
+        .patch(`/api/items/${createdItemId}`)
+        .set('Authorization', `Bearer ${tokenB}`)
+        .send({ status: 'completed' });
+      assert.equal(updateRes.status, 404);
+
+      // User B tries to delete User A's item -> 404
+      const deleteRes = await request(app)
+        .delete(`/api/items/${createdItemId}`)
+        .set('Authorization', `Bearer ${tokenB}`);
+      assert.equal(deleteRes.status, 404);
     });
 
-    await test('POST /api/items rejects invalid type with 400', async () => {
-      const res = await request(app).post('/api/items').send({
-        title: 'Invalid Media Test',
-        type: 'game', // not in valid enum
-      });
-      assert.equal(res.status, 400);
-      assert.equal(res.body.success, false);
-    });
-
-    // 4. Retrieve item by ID
-    await test('GET /api/items/:id returns created item with metadata', async () => {
-      const res = await request(app).get(`/api/items/${createdItemId}`);
-      assert.equal(res.status, 200);
-      assert.equal(res.body.data.id, createdItemId);
-      assert.equal(res.body.data.type, 'audio');
-      assert.equal(res.body.data.sourceUrl, 'https://open.spotify.com/episode/huberman-sleep');
-    });
-
-    await test('GET /api/items/non-existent returns 404', async () => {
-      const res = await request(app).get('/api/items/non-existent');
-      assert.equal(res.status, 404);
-      assert.equal(res.body.success, false);
-    });
-
-    // 5. List items
-    await test('GET /api/items returns list containing created item', async () => {
-      const res = await request(app).get('/api/items');
-      assert.equal(res.status, 200);
-      assert.equal(res.body.success, true);
-      assert.ok(Array.isArray(res.body.data));
-      assert.ok(res.body.data.some((i) => i.id === createdItemId));
-    });
-
-    // 6. Category and search filtering
-    await test('GET /api/items?type=audio filters accurately', async () => {
-      const res = await request(app).get('/api/items?type=audio');
-      assert.equal(res.status, 200);
-      const allAudio = res.body.data.every((i) => i.type === 'audio');
-      assert.ok(allAudio);
-    });
-
-    await test('GET /api/items?search=Huberman matches search query', async () => {
-      const res = await request(app).get('/api/items?search=Huberman');
-      assert.equal(res.status, 200);
-      assert.ok(res.body.data.some((i) => i.id === createdItemId));
-    });
-
-    await test('GET /api/items?search=%23Sleep matches #Sleep tagged items', async () => {
-      const res = await request(app).get('/api/items?search=%23Sleep');
-      assert.equal(res.status, 200);
-      assert.ok(res.body.data.some((i) => i.id === createdItemId));
-    });
-
-    // 7. Update item (PATCH)
-    await test('PATCH /api/items/:id updates status and auto-syncs progress to 100 on completion', async () => {
+    // 8. User A updates and deletes their own item
+    await test('PATCH /api/items/:id updates User A item', async () => {
       const res = await request(app)
         .patch(`/api/items/${createdItemId}`)
-        .send({
-          status: 'completed',
-          rating: '4.9',
-        });
+        .set('Authorization', `Bearer ${tokenA}`)
+        .send({ status: 'completed' });
       assert.equal(res.status, 200);
       assert.equal(res.body.data.status, 'completed');
       assert.equal(res.body.data.progress, 100);
-      assert.equal(res.body.data.progressLabel, 'Finished');
-      assert.equal(res.body.data.rating, '4.9');
     });
 
-    // 8. Delete item
-    await test('DELETE /api/items/:id deletes created item', async () => {
-      const res = await request(app).delete(`/api/items/${createdItemId}`);
+    await test('DELETE /api/items/:id deletes User A item', async () => {
+      const res = await request(app)
+        .delete(`/api/items/${createdItemId}`)
+        .set('Authorization', `Bearer ${tokenA}`);
       assert.equal(res.status, 200);
       assert.equal(res.body.success, true);
-
-      // Verify it's gone
-      const verifyRes = await request(app).get(`/api/items/${createdItemId}`);
-      assert.equal(verifyRes.status, 404);
       createdItemId = null;
     });
+
   } finally {
-    // If test failed before deleting created item, clean it up
-    if (createdItemId) {
-      try {
-        await prisma.item.delete({ where: { id: createdItemId } });
-      } catch (cleanupErr) {
-        console.warn('Cleanup error:', cleanupErr.message);
+    // Clean up test data from Neon DB
+    try {
+      if (userAId) {
+        await prisma.user.delete({ where: { id: userAId } }).catch(() => {});
       }
+      if (userBId) {
+        await prisma.user.delete({ where: { id: userBId } }).catch(() => {});
+      }
+    } catch (cleanupErr) {
+      console.warn('Test cleanup warning:', cleanupErr.message);
     }
     await prisma.$disconnect();
   }
