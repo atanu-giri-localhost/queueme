@@ -6,6 +6,7 @@ import {
   LayoutGrid,
   List,
   Keyboard,
+  FileText,
 } from 'lucide-react';
 import Button from '../common/Button';
 import logoIcon from '../../assets/queueme-icon.svg';
@@ -21,6 +22,7 @@ export default function Navbar({
   viewMode,
   setViewMode,
   currentView,
+  setCurrentView,
   counts,
 }) {
   const { isAuthenticated } = useAuth();
@@ -152,6 +154,19 @@ export default function Navbar({
           <Keyboard className="w-3.5 h-3.5" />
           <kbd className="text-[10px] font-mono">?</kbd>
         </button>
+
+        {/* Quick Notepad Button */}
+        <Button
+          id="navbar-notepad-btn"
+          variant={currentView === 'notepad' ? 'primary' : 'secondary'}
+          size="sm"
+          onClick={() => setCurrentView && setCurrentView(currentView === 'notepad' ? 'dashboard' : 'notepad')}
+          icon={FileText}
+          className={currentView === 'notepad' ? 'shadow-sm shadow-indigo-600/30' : ''}
+          title="Open Notepad (Offline scratchpad)"
+        >
+          <span>Notepad</span>
+        </Button>
 
         {/* Sign In & Sign Up buttons for unauthenticated users */}
         {!isAuthenticated && (

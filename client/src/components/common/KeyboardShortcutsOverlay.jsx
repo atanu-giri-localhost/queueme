@@ -7,6 +7,7 @@ const SHORTCUT_GROUPS = [
     shortcuts: [
       { keys: ['1'], description: 'Go to Dashboard' },
       { keys: ['2'], description: 'Go to Queue Backlog' },
+      { keys: ['3'], description: 'Go to Notepad' },
       { keys: ['?'], description: 'Show this help overlay' },
     ],
   },

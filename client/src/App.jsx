@@ -5,6 +5,7 @@ import {
   ArrowRight,
   FilterX,
   AlertTriangle,
+  FileText,
 } from 'lucide-react';
 
 import { useQueueStorage } from './hooks/useQueueStorage';
@@ -260,6 +261,10 @@ export default function App() {
           e.preventDefault();
           setCurrentView('queue');
           break;
+        case '3':
+          e.preventDefault();
+          setCurrentView('notepad');
+          break;
         case 'g':
         case 'G':
           e.preventDefault();
@@ -331,6 +336,7 @@ export default function App() {
           viewMode={viewMode}
           setViewMode={setViewMode}
           currentView={currentView}
+          setCurrentView={setCurrentView}
           counts={counts}
         />
 
@@ -417,6 +423,15 @@ export default function App() {
                       iconRight={ArrowRight}
                     >
                       Explore Queue
+                    </Button>
+                    <Button
+                      id="dashboard-open-notepad-btn"
+                      variant="secondary"
+                      size="md"
+                      onClick={() => setCurrentView('notepad')}
+                      icon={FileText}
+                    >
+                      Notepad
                     </Button>
                     <Button
                       id="dashboard-add-item-btn"

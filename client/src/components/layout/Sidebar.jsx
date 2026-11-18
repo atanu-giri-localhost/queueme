@@ -38,6 +38,17 @@ export default function Sidebar({
       },
     },
     {
+      id: 'notepad',
+      label: 'Notepad',
+      icon: FileText,
+      badgeText: 'New',
+      badgeColor: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
+      active: currentView === 'notepad',
+      onClick: () => {
+        setCurrentView('notepad');
+      },
+    },
+    {
       id: 'all',
       label: 'All Queue',
       icon: Layers,
@@ -73,15 +84,6 @@ export default function Sidebar({
         setCurrentView('queue');
         setStatusFilter('completed');
         setSelectedCategory('all');
-      },
-    },
-    {
-      id: 'notepad',
-      label: 'Notepad',
-      icon: FileText,
-      active: currentView === 'notepad',
-      onClick: () => {
-        setCurrentView('notepad');
       },
     },
   ];
@@ -181,6 +183,15 @@ export default function Sidebar({
                         }`}
                       >
                         {item.count}
+                      </span>
+                    )}
+                    {item.badgeText && (
+                      <span
+                        className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider border ${
+                          item.badgeColor || 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'
+                        }`}
+                      >
+                        {item.badgeText}
                       </span>
                     )}
                   </>

@@ -109,6 +109,27 @@ export default function MobileNav({
             <button
               onClick={() =>
                 handleNav(() => {
+                  setCurrentView('notepad');
+                })
+              }
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+                currentView === 'notepad'
+                  ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30'
+                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <FileText className="w-4 h-4 text-indigo-400" />
+                <span>Notepad</span>
+              </div>
+              <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                New
+              </span>
+            </button>
+
+            <button
+              onClick={() =>
+                handleNav(() => {
                   setCurrentView('queue');
                   setStatusFilter('all');
                   setSelectedCategory('all');
@@ -173,24 +194,6 @@ export default function MobileNav({
               <span className="text-xs px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
                 {counts.completed}
               </span>
-            </button>
-
-            <button
-              onClick={() =>
-                handleNav(() => {
-                  setCurrentView('notepad');
-                })
-              }
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
-                currentView === 'notepad'
-                  ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <FileText className="w-4 h-4 text-indigo-400" />
-                <span>Notepad</span>
-              </div>
             </button>
           </div>
 
