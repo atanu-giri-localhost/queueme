@@ -23,11 +23,11 @@ export default function Button({
     ghost:
       'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/70 border border-transparent active:scale-[0.98]',
     outline:
-      'border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white bg-transparent active:scale-[0.98]',
+      'border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 bg-transparent active:scale-[0.98]',
     subtle:
       'bg-zinc-900/80 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100 border border-zinc-800/80 active:scale-[0.98]',
     danger:
-      'bg-rose-600/10 hover:bg-rose-600/20 text-rose-400 border border-rose-500/30 active:scale-[0.98]',
+      'bg-rose-600/10 hover:bg-rose-600/20 text-rose-700 dark:text-rose-400 border border-rose-500/30 active:scale-[0.98]',
   };
 
   const sizes = {

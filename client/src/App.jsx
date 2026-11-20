@@ -368,15 +368,15 @@ export default function App() {
             {currentView === 'dashboard' && (
             <div className="space-y-8 max-w-7xl mx-auto">
               {/* Productivity Welcome Banner */}
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-950/70 via-zinc-900/90 to-zinc-900/80 border border-indigo-500/20 p-6 sm:p-8 backdrop-blur-md shadow-xl">
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-500/10 via-zinc-900 to-zinc-900/90 dark:from-indigo-950/70 dark:via-zinc-900/90 dark:to-zinc-900/80 border border-indigo-500/20 p-6 sm:p-8 backdrop-blur-md shadow-xl">
                 {/* Background glow decoration */}
                 <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute right-1/3 -top-10 w-48 h-48 bg-violet-500/10 rounded-full blur-2xl pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                   <div className="space-y-2">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-medium">
-                      <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                       <span>Backlog & Reading Hub</span>
                     </div>
                     <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-100 tracking-tight">
@@ -385,8 +385,8 @@ export default function App() {
                     <p className="text-sm text-zinc-400 max-w-xl leading-relaxed">
                       {isAuthenticated ? (
                         <>
-                          You have <span className="text-indigo-400 font-semibold">{counts.in_progress} items in progress</span> and{' '}
-                          <span className="text-zinc-200 font-semibold">{counts.queued} pending items</span> in your personal queue.
+                          You have <span className="text-indigo-700 dark:text-indigo-400 font-bold">{counts.in_progress} items in progress</span> and{' '}
+                          <span className="text-zinc-100 font-bold">{counts.queued} pending items</span> in your personal queue.
                         </>
                       ) : (
                         'Sign in to synchronize and access your personal watchlist, books, and articles across devices.'
@@ -477,7 +477,7 @@ export default function App() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-base font-bold text-white tracking-tight">
+                    <h3 className="text-base font-bold text-zinc-100 tracking-tight">
                       Recently Added to Backlog
                     </h3>
                     <p className="text-xs text-zinc-400">
@@ -493,7 +493,7 @@ export default function App() {
                       setPriorityFilter('all');
                       setSearchQuery('');
                     }}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors cursor-pointer"
                   >
                     <span>View all ({counts.total})</span>
                     <ArrowRight className="w-3.5 h-3.5" />

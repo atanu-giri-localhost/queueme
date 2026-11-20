@@ -217,7 +217,7 @@ export default function ItemDetailModal({
                   id="cancel-delete-btn"
                   type="button"
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="px-3.5 py-2 rounded-xl text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 border border-zinc-700/60 transition-colors cursor-pointer"
+                  className="px-3.5 py-2 rounded-xl text-xs font-medium text-zinc-300 hover:text-zinc-100 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700/60 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -408,7 +408,7 @@ export default function ItemDetailModal({
                   id="cancel-edit-btn"
                   type="button"
                   onClick={handleCancelEdit}
-                  className="px-3.5 py-2 rounded-xl text-xs font-medium text-zinc-400 hover:text-white bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 transition-colors cursor-pointer"
+                  className="px-3.5 py-2 rounded-xl text-xs font-medium text-zinc-400 hover:text-zinc-100 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -545,7 +545,7 @@ export default function ItemDetailModal({
                           onClick={() => handleProgressChange(currentProgress - 10)}
                           disabled={currentProgress <= 0}
                           title="Decrease by 10%"
-                          className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-lg bg-zinc-950/80 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-lg bg-zinc-950/80 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100 border border-zinc-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
                         >
                           <Minus className="w-3 h-3" />
                           <span>10%</span>
@@ -556,7 +556,7 @@ export default function ItemDetailModal({
                           onClick={() => handleProgressChange(currentProgress + 10)}
                           disabled={currentProgress >= 100}
                           title="Increase by 10%"
-                          className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-lg bg-zinc-950/80 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-lg bg-zinc-950/80 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100 border border-zinc-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
                         >
                           <Plus className="w-3 h-3" />
                           <span>10%</span>
@@ -696,7 +696,7 @@ export default function ItemDetailModal({
                     id="start-edit-btn"
                     type="button"
                     onClick={handleStartEdit}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-xl text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-xl text-zinc-300 hover:text-zinc-100 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 transition-colors cursor-pointer"
                     title="Edit item details"
                   >
                     <Edit3 className="w-3.5 h-3.5 text-indigo-400" />
@@ -732,7 +732,7 @@ export default function ItemDetailModal({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="text-xs text-zinc-400 hover:text-white px-3 py-2 rounded-xl hover:bg-zinc-900 transition-colors cursor-pointer"
+                    className="text-xs text-zinc-400 hover:text-zinc-100 px-3 py-2 rounded-xl hover:bg-zinc-900 transition-colors cursor-pointer"
                   >
                     Close
                   </button>

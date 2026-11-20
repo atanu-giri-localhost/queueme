@@ -71,7 +71,7 @@ export default function KeyboardShortcutsOverlay({ isOpen, onClose }) {
             <div className="p-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
               <Keyboard className="w-4 h-4" />
             </div>
-            <h2 id="shortcuts-overlay-title" className="text-sm font-bold text-white">
+            <h2 id="shortcuts-overlay-title" className="text-sm font-bold text-zinc-100">
               Keyboard Shortcuts
             </h2>
           </div>
@@ -80,7 +80,7 @@ export default function KeyboardShortcutsOverlay({ isOpen, onClose }) {
             type="button"
             onClick={onClose}
             aria-label="Close keyboard shortcuts"
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>

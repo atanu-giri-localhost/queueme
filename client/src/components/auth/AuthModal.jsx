@@ -129,7 +129,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
           type="button"
           onClick={handleClose}
           aria-label="Close modal"
-          className="absolute top-5 right-5 p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900 border border-transparent hover:border-zinc-800 transition-colors cursor-pointer"
+          className="absolute top-5 right-5 p-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 border border-transparent hover:border-zinc-800 transition-colors cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
@@ -151,8 +151,8 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
 
         {/* Error Alert */}
         {authError && (
-          <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs">
-            <AlertCircle className="w-4 h-4 shrink-0 text-rose-400 mt-0.5" />
+          <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-300 text-xs font-medium">
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-500 dark:text-rose-400 mt-0.5" />
             <span className="leading-relaxed">{authError}</span>
           </div>
         )}
@@ -260,7 +260,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                 setMode(mode === 'register' ? 'login' : 'register');
                 setAuthError(null);
               }}
-              className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors cursor-pointer"
+              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-semibold transition-colors cursor-pointer"
             >
               {mode === 'register' ? 'Sign in' : 'Create account'}
             </button>

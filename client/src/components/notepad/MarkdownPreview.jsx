@@ -22,7 +22,7 @@ export default function MarkdownPreview({ content }) {
         renderedElements.push(
           <pre
             key={`code-${i}`}
-            className="p-3 my-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-mono text-indigo-300 overflow-x-auto"
+            className="p-3 my-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-mono text-indigo-700 dark:text-indigo-300 font-semibold overflow-x-auto"
           >
             <code>{codeBuffer.join('\n')}</code>
           </pre>
@@ -149,7 +149,7 @@ function renderInline(text) {
       parts.push(
         <code
           key={key++}
-          className="px-1.5 py-0.5 rounded bg-zinc-800 text-indigo-300 text-xs font-mono"
+          className="px-1.5 py-0.5 rounded bg-zinc-800 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-medium"
         >
           {matchedStr.slice(1, -1)}
         </code>

@@ -113,14 +113,14 @@ export default function ItemListItem({
               e.stopPropagation();
               if (onStatusChange) onStatusChange(item.id, nextStatus);
             }}
-            className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700/80 text-zinc-300 hover:text-white border border-zinc-700/60 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700/80 text-zinc-300 hover:text-zinc-100 border border-zinc-700/60 transition-colors cursor-pointer"
           >
             {nextStatus === 'completed' ? (
-              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+              <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
             ) : nextStatus === 'in_progress' ? (
-              <Flame className="w-3 h-3 text-amber-400" />
+              <Flame className="w-3 h-3 text-amber-600 dark:text-amber-400" />
             ) : (
-              <RotateCcw className="w-3 h-3 text-zinc-400" />
+              <RotateCcw className="w-3 h-3 text-zinc-500 dark:text-zinc-400" />
             )}
             <span>{nextStatusLabel}</span>
           </button>

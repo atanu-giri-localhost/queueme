@@ -62,7 +62,7 @@ export default function FilterBar({
   };
 
   return (
-    <div className="space-y-4 bg-zinc-900/50 p-4 rounded-2xl border border-zinc-800/80 backdrop-blur-sm">
+    <div className="space-y-4 bg-zinc-900 p-4 rounded-2xl border border-zinc-800 shadow-sm backdrop-blur-sm">
       {/* Top Row: Search + Sort + View switcher */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 justify-between">
         {/* Search */}
@@ -80,7 +80,7 @@ export default function FilterBar({
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white p-0.5 rounded cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-100 p-0.5 rounded cursor-pointer"
               title="Clear search"
             >
               <X className="w-3.5 h-3.5" />
@@ -135,7 +135,7 @@ export default function FilterBar({
               id="reset-filters-btn"
               type="button"
               onClick={handleResetFilters}
-              className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white px-2.5 py-2 rounded-xl bg-zinc-800/80 hover:bg-zinc-800 border border-zinc-700/60 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-100 px-2.5 py-2 rounded-xl bg-zinc-800/80 hover:bg-zinc-800 border border-zinc-700/60 transition-colors cursor-pointer"
               title="Reset all filters"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -149,7 +149,7 @@ export default function FilterBar({
               type="button"
               onClick={() => setViewMode('grid')}
               className={`p-1.5 rounded-lg text-xs ${
-                viewMode === 'grid' ? 'bg-zinc-800 text-white' : 'text-zinc-400'
+                viewMode === 'grid' ? 'bg-zinc-800 text-zinc-100 shadow-sm font-semibold' : 'text-zinc-400 hover:text-zinc-100'
               }`}
             >
               <LayoutGrid className="w-4 h-4" />
@@ -158,7 +158,7 @@ export default function FilterBar({
               type="button"
               onClick={() => setViewMode('list')}
               className={`p-1.5 rounded-lg text-xs ${
-                viewMode === 'list' ? 'bg-zinc-800 text-white' : 'text-zinc-400'
+                viewMode === 'list' ? 'bg-zinc-800 text-zinc-100 shadow-sm font-semibold' : 'text-zinc-400 hover:text-zinc-100'
               }`}
             >
               <List className="w-4 h-4" />
@@ -181,8 +181,8 @@ export default function FilterBar({
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-xl border transition-all whitespace-nowrap cursor-pointer ${
                   isSelected
-                    ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/20'
-                    : 'bg-zinc-950/60 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border-zinc-800/80'
+                    ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/20 font-semibold'
+                    : 'bg-zinc-950/60 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-100 border-zinc-800/80'
                 }`}
               >
                 {cat.id !== 'all' && (
@@ -209,8 +209,8 @@ export default function FilterBar({
                 onClick={() => setStatusFilter(status.id)}
                 className={`text-xs font-medium px-3 py-1 rounded-lg transition-all whitespace-nowrap cursor-pointer ${
                   isSelected
-                    ? 'bg-zinc-800 text-white shadow-sm font-semibold'
-                    : 'text-zinc-400 hover:text-zinc-200'
+                    ? 'bg-zinc-800 text-zinc-100 shadow-sm font-semibold'
+                    : 'text-zinc-400 hover:text-zinc-100'
                 }`}
               >
                 {status.label}
@@ -230,14 +230,14 @@ export default function FilterBar({
           {searchQuery.trim().startsWith('#') && (
             <span
               id="active-tag-filter-pill"
-              className="inline-flex items-center gap-1.5 text-[11px] font-mono pl-2 pr-1.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30"
+              className="inline-flex items-center gap-1.5 text-[11px] font-mono pl-2 pr-1.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 font-semibold"
             >
               <span>Tag: {searchQuery.trim()}</span>
               <button
                 id="clear-tag-filter-btn"
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="hover:text-white hover:bg-indigo-500/20 p-0.5 rounded-full cursor-pointer transition-colors"
+                className="hover:text-zinc-100 hover:bg-indigo-500/20 p-0.5 rounded-full cursor-pointer transition-colors"
                 title="Clear tag filter"
               >
                 <X className="w-3 h-3" />

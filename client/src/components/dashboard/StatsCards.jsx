@@ -18,7 +18,7 @@ export default function StatsCards({
       icon: Layers,
       accent: 'indigo',
       cardClass: 'hover:border-indigo-500/40 from-indigo-500/5 to-transparent',
-      iconClass: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
+      iconClass: 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/20',
       badge: 'All Media',
     },
     {
@@ -31,7 +31,7 @@ export default function StatsCards({
       icon: Flame,
       accent: 'amber',
       cardClass: 'hover:border-amber-500/40 from-amber-500/5 to-transparent',
-      iconClass: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+      iconClass: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20',
       badge: 'Active Now',
     },
     {
@@ -44,7 +44,7 @@ export default function StatsCards({
       icon: CheckCircle2,
       accent: 'emerald',
       cardClass: 'hover:border-emerald-500/40 from-emerald-500/5 to-transparent',
-      iconClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+      iconClass: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20',
       badge: `${completionRate}% Done`,
     },
     {
@@ -57,7 +57,7 @@ export default function StatsCards({
       icon: Clock,
       accent: 'violet',
       cardClass: 'hover:border-violet-500/40 from-violet-500/5 to-transparent',
-      iconClass: 'bg-violet-500/10 text-violet-400 border-violet-500/20',
+      iconClass: 'bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-500/20',
       badge: 'Pending',
     },
   ];
@@ -73,10 +73,10 @@ export default function StatsCards({
             key={stat.id}
             id={`stat-card-${stat.id}`}
             onClick={() => onSelectStatus && onSelectStatus(stat.statusTarget)}
-            className={`group relative p-5 rounded-2xl bg-gradient-to-b bg-zinc-900/60 border backdrop-blur-sm transition-all duration-200 cursor-pointer ${
+            className={`group relative p-5 rounded-2xl bg-zinc-900 border backdrop-blur-sm transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md ${
               isSelected
-                ? 'border-indigo-500 ring-1 ring-indigo-500/40 bg-zinc-900'
-                : 'border-zinc-800/80 hover:bg-zinc-900/90'
+                ? 'border-indigo-500 ring-1 ring-indigo-500/40'
+                : 'border-zinc-800 hover:border-zinc-700'
             } ${stat.cardClass}`}
           >
             <div className="flex items-center justify-between mb-3">

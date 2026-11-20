@@ -9,16 +9,16 @@ export default function CategoryBreakdown({
   const total = counts.total || 1;
 
   const typeConfig = {
-    movie: { label: 'Movies & TV', color: 'bg-rose-500', barColor: 'from-rose-500 to-rose-600', text: 'text-rose-400' },
-    video: { label: 'Videos', color: 'bg-red-500', barColor: 'from-red-500 to-red-600', text: 'text-red-400' },
-    article: { label: 'Articles', color: 'bg-emerald-500', barColor: 'from-emerald-500 to-emerald-600', text: 'text-emerald-400' },
-    book: { label: 'Books', color: 'bg-sky-500', barColor: 'from-sky-500 to-sky-600', text: 'text-sky-400' },
-    course: { label: 'Courses', color: 'bg-violet-500', barColor: 'from-violet-500 to-violet-600', text: 'text-violet-400' },
-    audio: { label: 'Audio', color: 'bg-fuchsia-500', barColor: 'from-fuchsia-500 to-fuchsia-600', text: 'text-fuchsia-400' },
+    movie: { label: 'Movies & TV', color: 'bg-rose-500', barColor: 'from-rose-500 to-rose-600', text: 'text-rose-700 dark:text-rose-400' },
+    video: { label: 'Videos', color: 'bg-red-500', barColor: 'from-red-500 to-red-600', text: 'text-red-700 dark:text-red-400' },
+    article: { label: 'Articles', color: 'bg-emerald-500', barColor: 'from-emerald-500 to-emerald-600', text: 'text-emerald-700 dark:text-emerald-400' },
+    book: { label: 'Books', color: 'bg-sky-500', barColor: 'from-sky-500 to-sky-600', text: 'text-sky-700 dark:text-sky-400' },
+    course: { label: 'Courses', color: 'bg-violet-500', barColor: 'from-violet-500 to-violet-600', text: 'text-violet-700 dark:text-violet-400' },
+    audio: { label: 'Audio', color: 'bg-fuchsia-500', barColor: 'from-fuchsia-500 to-fuchsia-600', text: 'text-fuchsia-700 dark:text-fuchsia-400' },
   };
 
   return (
-    <div className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-sm space-y-4">
+    <div className="p-5 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-sm backdrop-blur-sm space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-sm font-bold text-zinc-100 tracking-tight">Queue Distribution</h3>

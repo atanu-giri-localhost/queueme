@@ -81,9 +81,9 @@ export function TagBadge({ label, onClick, onSelectTag, active = false, size = '
       title={isClickable ? `Filter backlog by #${cleanLabel}` : undefined}
       className={`inline-flex items-center rounded-md border font-medium transition-colors select-none ${sizeClasses} ${
         active
-          ? 'bg-indigo-600/30 text-indigo-200 border-indigo-500/50 shadow-sm'
-          : 'bg-zinc-800/60 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border-zinc-700/40'
-      } ${isClickable ? 'cursor-pointer hover:border-indigo-500/40 hover:text-indigo-300' : 'cursor-default'}`}
+          ? 'bg-indigo-600/15 text-indigo-700 dark:text-indigo-200 border-indigo-500/40 font-semibold shadow-sm'
+          : 'bg-zinc-800/80 hover:bg-zinc-750 text-zinc-400 hover:text-zinc-100 border-zinc-700/60'
+      } ${isClickable ? 'cursor-pointer hover:border-indigo-500/40 hover:text-indigo-700 dark:hover:text-indigo-300' : 'cursor-default'}`}
     >
       #{cleanLabel}
     </button>

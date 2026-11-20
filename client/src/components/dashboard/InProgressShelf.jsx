@@ -17,7 +17,7 @@ export default function InProgressShelf({
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+          <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
             <Flame className="w-4 h-4 animate-pulse" />
           </div>
           <div>
@@ -29,7 +29,7 @@ export default function InProgressShelf({
             </p>
           </div>
         </div>
-        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
           {inProgressItems.length} active
         </span>
       </div>
@@ -41,7 +41,7 @@ export default function InProgressShelf({
             key={item.id}
             id={`in-progress-${item.id}`}
             onClick={() => onSelectItem(item)}
-            className="group relative flex flex-col justify-between p-4 rounded-2xl bg-zinc-900/80 hover:bg-zinc-900 border border-zinc-800/90 hover:border-amber-500/40 transition-all duration-200 cursor-pointer overflow-hidden shadow-lg shadow-black/20"
+            className="group relative flex flex-col justify-between p-4 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-amber-500/50 transition-all duration-200 cursor-pointer overflow-hidden shadow-sm hover:shadow-md"
           >
             {/* Top row: Type and Priority */}
             <div>
@@ -82,7 +82,7 @@ export default function InProgressShelf({
                 <span className="font-mono text-[11px] text-zinc-300 font-medium">
                   {item.progressLabel || `${item.progress}%`}
                 </span>
-                <span className="text-[11px] text-amber-400 font-medium">{item.duration}</span>
+                <span className="text-[11px] text-amber-700 dark:text-amber-400 font-semibold">{item.duration}</span>
               </div>
 
               {/* Progress bar */}
@@ -101,14 +101,14 @@ export default function InProgressShelf({
                     e.stopPropagation();
                     if (onStatusChange) onStatusChange(item.id, 'completed');
                   }}
-                  className="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-400 hover:text-emerald-400 px-2 py-1 rounded-lg hover:bg-zinc-800/80 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 px-2 py-1 rounded-lg hover:bg-zinc-800/80 transition-colors cursor-pointer"
                   title="Mark as completed"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>Mark Done</span>
                 </button>
 
-                <div className="inline-flex items-center gap-1 text-xs font-semibold text-amber-400 group-hover:translate-x-0.5 transition-transform">
+                <div className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 dark:text-amber-400 group-hover:translate-x-0.5 transition-transform">
                   <span>Resume</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </div>

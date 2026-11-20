@@ -155,7 +155,7 @@ export default function NoteEditor({
         <button
           type="button"
           onClick={onBackToList}
-          className="md:hidden p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors cursor-pointer"
+          className="md:hidden p-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors cursor-pointer"
           title="Back to notes list"
         >
           <ArrowLeft className="w-5 h-5" />
@@ -179,11 +179,11 @@ export default function NoteEditor({
             title={pinned ? 'Unpin note' : 'Pin note to top'}
             className={`p-2 rounded-xl transition-colors cursor-pointer ${
               pinned
-                ? 'text-indigo-400 bg-indigo-500/10 border border-indigo-500/20'
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                ? 'text-indigo-700 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20'
+                : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900'
             }`}
           >
-            {pinned ? <Pin className="w-4 h-4 fill-indigo-400" /> : <PinOff className="w-4 h-4" />}
+            {pinned ? <Pin className="w-4 h-4 fill-indigo-700 dark:fill-indigo-400" /> : <PinOff className="w-4 h-4" />}
           </button>
 
           {/* Delete Note Button */}
@@ -191,34 +191,20 @@ export default function NoteEditor({
             type="button"
             onClick={() => onDeleteNote(activeNoteId)}
             title="Delete note"
-            className="p-2 rounded-xl text-zinc-400 hover:text-rose-400 hover:bg-zinc-900 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-zinc-900 transition-colors cursor-pointer"
           >
             <Trash2 className="w-4 h-4" />
           </button>
 
           {/* Status Badge */}
           <div
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-medium border"
-            style={{
-              backgroundColor:
-                saveStatus === 'saved'
-                  ? 'rgba(16, 185, 129, 0.08)'
-                  : saveStatus === 'offline'
-                  ? 'rgba(245, 158, 11, 0.08)'
-                  : 'rgba(234, 179, 8, 0.08)',
-              borderColor:
-                saveStatus === 'saved'
-                  ? 'rgba(16, 185, 129, 0.2)'
-                  : saveStatus === 'offline'
-                  ? 'rgba(245, 158, 11, 0.2)'
-                  : 'rgba(234, 179, 8, 0.2)',
-              color:
-                saveStatus === 'saved'
-                  ? '#34d399'
-                  : saveStatus === 'offline'
-                  ? '#fbbf24'
-                  : '#facc15',
-            }}
+            className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold border ${
+              saveStatus === 'saved'
+                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400'
+                : saveStatus === 'offline'
+                ? 'bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-400'
+                : 'bg-yellow-500/10 border-yellow-500/20 text-yellow-800 dark:text-yellow-400'
+            }`}
           >
             {saveStatus === 'saving' ? (
               <>
@@ -265,7 +251,7 @@ export default function NoteEditor({
           <button
             type="button"
             onClick={() => insertFormatting('**', '**')}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
             title="Bold (**text**)"
           >
             <Bold className="w-4 h-4" />
@@ -273,7 +259,7 @@ export default function NoteEditor({
           <button
             type="button"
             onClick={() => insertFormatting('*', '*')}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
             title="Italic (*text*)"
           >
             <Italic className="w-4 h-4" />
@@ -281,7 +267,7 @@ export default function NoteEditor({
           <button
             type="button"
             onClick={() => insertFormatting('## ')}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
             title="Heading (## Heading)"
           >
             <Heading className="w-4 h-4" />
@@ -289,7 +275,7 @@ export default function NoteEditor({
           <button
             type="button"
             onClick={() => insertFormatting('- ')}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
             title="Bullet list (- Item)"
           >
             <List className="w-4 h-4" />
@@ -297,7 +283,7 @@ export default function NoteEditor({
           <button
             type="button"
             onClick={() => insertFormatting('- [ ] ')}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
             title="Task list (- [ ] Task)"
           >
             <CheckSquare className="w-4 h-4" />
@@ -305,7 +291,7 @@ export default function NoteEditor({
           <button
             type="button"
             onClick={() => insertFormatting('`', '`')}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
             title="Inline code (`code`)"
           >
             <Code className="w-4 h-4" />
@@ -313,7 +299,7 @@ export default function NoteEditor({
           <button
             type="button"
             onClick={() => insertFormatting('> ')}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
             title="Quote (> quote)"
           >
             <Quote className="w-4 h-4" />
@@ -360,7 +346,7 @@ export default function NoteEditor({
             value={content}
             onChange={(e) => handleContentChange(e.target.value)}
             placeholder="Start typing your note... You can write plain text, bullet points, checklists (- [ ]), quotes, or markdown. Your draft is continuously preserved on this device even if you go offline."
-            className="w-full h-full min-h-[350px] bg-transparent border-0 text-sm sm:text-base text-zinc-200 placeholder-zinc-600 focus:outline-none focus:ring-0 resize-none font-sans leading-relaxed"
+            className="w-full h-full min-h-[350px] bg-transparent border-0 text-sm sm:text-base text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-0 resize-none font-sans leading-relaxed"
           />
         )}
       </div>

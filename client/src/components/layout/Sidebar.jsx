@@ -123,11 +123,11 @@ export default function Sidebar({
             <div className="flex flex-col">
               <span className="font-bold text-base tracking-tight text-zinc-100 flex items-center gap-1.5">
                 QueueMe
-                <span className="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                <span className="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20">
                   v1.0
                 </span>
               </span>
-              <span className="text-[11px] text-zinc-500 font-medium">Watch & Read Backlog</span>
+              <span className="text-[11px] text-zinc-400 font-medium">Watch & Read Backlog</span>
             </div>
           )}
         </div>
@@ -137,7 +137,7 @@ export default function Sidebar({
           id="collapse-sidebar-btn"
           type="button"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className={`p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/80 transition-colors ${
+          className={`p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 transition-colors ${
             isCollapsed ? 'mx-auto' : ''
           }`}
           title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -164,13 +164,13 @@ export default function Sidebar({
                 title={isCollapsed ? item.label : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all group relative cursor-pointer ${
                   item.active
-                    ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 shadow-sm shadow-indigo-500/5'
-                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/80 border border-transparent'
+                    ? 'bg-indigo-600/15 text-indigo-700 dark:text-indigo-300 font-semibold border border-indigo-500/30 shadow-sm shadow-indigo-500/5'
+                    : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 border border-transparent'
                 } ${isCollapsed ? 'justify-center px-2' : ''}`}
               >
                 <Icon
                   className={`w-4 h-4 shrink-0 transition-colors ${
-                    item.active ? 'text-indigo-400' : 'text-zinc-400 group-hover:text-zinc-200'
+                    item.active ? 'text-indigo-700 dark:text-indigo-400' : 'text-zinc-400 group-hover:text-zinc-100'
                   }`}
                 />
                 {!isCollapsed && (
@@ -231,14 +231,14 @@ export default function Sidebar({
                 title={isCollapsed ? cat.label : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all group relative cursor-pointer ${
                   isSelected
-                    ? 'bg-zinc-800 text-white border border-zinc-700 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/80 border border-transparent'
+                    ? 'bg-zinc-800 text-zinc-100 font-semibold border border-zinc-700 shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 border border-transparent'
                 } ${isCollapsed ? 'justify-center px-2' : ''}`}
               >
                 <TypeIcon
                   type={cat.type}
                   className={`w-4 h-4 shrink-0 transition-colors ${
-                    isSelected ? 'text-indigo-400' : 'text-zinc-400 group-hover:text-zinc-200'
+                    isSelected ? 'text-indigo-700 dark:text-indigo-400' : 'text-zinc-400 group-hover:text-zinc-100'
                   }`}
                 />
                 {!isCollapsed && (

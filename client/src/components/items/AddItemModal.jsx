@@ -181,7 +181,7 @@ export default function AddItemModal({
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800/80 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -214,11 +214,11 @@ export default function AddItemModal({
                     onClick={() => setType(t.id)}
                     className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border text-xs font-medium transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-indigo-600/15 border-indigo-500 text-white shadow-sm ring-1 ring-indigo-500/30'
+                        ? 'bg-indigo-600/15 border-indigo-500 text-indigo-700 dark:text-indigo-300 font-semibold shadow-sm ring-1 ring-indigo-500/30'
                         : 'bg-zinc-900/60 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200 border-zinc-800'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 ${isSelected ? 'text-indigo-400' : t.color}`} />
+                    <Icon className={`w-4 h-4 ${isSelected ? 'text-indigo-700 dark:text-indigo-400' : t.color}`} />
                     <span className="truncate">{t.label}</span>
                   </button>
                 );
@@ -394,7 +394,7 @@ export default function AddItemModal({
             <button
               type="button"
               onClick={onClose}
-              className="text-xs text-zinc-400 hover:text-white px-4 py-2.5 rounded-xl hover:bg-zinc-900 transition-colors cursor-pointer"
+              className="text-xs text-zinc-400 hover:text-zinc-100 px-4 py-2.5 rounded-xl hover:bg-zinc-900 transition-colors cursor-pointer"
             >
               Cancel
             </button>

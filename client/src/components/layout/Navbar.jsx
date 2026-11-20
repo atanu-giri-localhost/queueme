@@ -57,7 +57,7 @@ export default function Navbar({
           id="mobile-nav-toggle-btn"
           type="button"
           onClick={onOpenMobileNav}
-          className="md:hidden p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/80 transition-colors cursor-pointer"
+          className="md:hidden p-2 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 transition-colors cursor-pointer"
           title="Open Navigation"
           aria-label="Open Navigation menu"
         >
@@ -124,8 +124,8 @@ export default function Navbar({
             aria-label="Switch to Grid View"
             className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
               viewMode === 'grid'
-                ? 'bg-zinc-800 text-white shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-zinc-800 text-zinc-100 shadow-sm font-semibold'
+                : 'text-zinc-400 hover:text-zinc-100'
             }`}
           >
             <LayoutGrid className="w-4 h-4" />
@@ -138,8 +138,8 @@ export default function Navbar({
             aria-label="Switch to List View"
             className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
               viewMode === 'list'
-                ? 'bg-zinc-800 text-white shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-zinc-800 text-zinc-100 shadow-sm font-semibold'
+                : 'text-zinc-400 hover:text-zinc-100'
             }`}
           >
             <List className="w-4 h-4" />
@@ -153,7 +153,7 @@ export default function Navbar({
           onClick={onOpenShortcuts}
           title="Keyboard shortcuts (?)"
           aria-label="Open keyboard shortcuts reference"
-          className="hidden sm:inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/80 border border-zinc-700/40 hover:border-zinc-600/60 transition-colors cursor-pointer"
+          className="hidden sm:inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 border border-zinc-700/40 hover:border-zinc-600/60 transition-colors cursor-pointer"
         >
           <Keyboard className="w-3.5 h-3.5" />
           <kbd className="text-[10px] font-mono">?</kbd>

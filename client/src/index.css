@@ -4,18 +4,18 @@
 
 :root {
   color-scheme: light;
-  /* Light Theme: Cool Ash / Mineral Mist */
+  /* Light Theme: Cool Ash / High-Contrast Mineral Slate */
   --theme-bg-base: #eef1f4;
   --theme-bg-card: #ffffff;
-  --theme-bg-card-subtle: #f8fafb;
-  --theme-bg-elevated: #f0f3f6;
-  --theme-bg-hover: #e4e8ec;
-  --theme-border-base: #d6dbe1;
-  --theme-border-subtle: #e2e6eb;
-  --theme-text-main: #1f242c;
-  --theme-text-body: #2b313b;
-  --theme-text-muted: #5b6574;
-  --theme-text-dim: #8895a5;
+  --theme-bg-card-subtle: #f8fafc;
+  --theme-bg-elevated: #dbe2ea;
+  --theme-bg-hover: #cbd5e1;
+  --theme-border-base: #cbd5e1;
+  --theme-border-subtle: #94a3b8;
+  --theme-text-main: #0f172a;
+  --theme-text-body: #1e293b;
+  --theme-text-muted: #334155;
+  --theme-text-dim: #475569;
 }
 
 .dark {

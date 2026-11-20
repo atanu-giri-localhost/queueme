@@ -150,7 +150,7 @@ export default function NotepadView({ onOpenAuth }) {
     <div className="flex-1 flex flex-col h-[calc(100vh-4rem)] overflow-hidden bg-zinc-950">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-zinc-900 border border-zinc-700 text-xs font-medium text-white shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="fixed top-20 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-zinc-900 border border-zinc-700 text-xs font-medium text-zinc-100 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
           <AlertCircle className="w-4 h-4 text-indigo-400 shrink-0" />
           <span>{toastMessage}</span>
         </div>
@@ -271,16 +271,16 @@ export default function NotepadView({ onOpenAuth }) {
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-1.5 min-w-0">
                         {n.pinned && (
-                          <Pin className="w-3 h-3 text-indigo-400 shrink-0 fill-indigo-400" />
+                          <Pin className="w-3 h-3 text-indigo-700 dark:text-indigo-400 shrink-0 fill-indigo-700 dark:fill-indigo-400" />
                         )}
-                        <span className="font-semibold text-xs text-zinc-200 truncate">
+                        <span className="font-semibold text-xs text-zinc-100 truncate">
                           {n.title || 'Untitled Note'}
                         </span>
                       </div>
                       {hasLocalDraft && (
                         <span
                           title="Contains unsaved changes on this device"
-                          className="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[10px] font-medium border border-amber-500/20 shrink-0"
+                          className="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-400 text-[10px] font-semibold border border-amber-500/20 shrink-0"
                         >
                           Unsaved
                         </span>
