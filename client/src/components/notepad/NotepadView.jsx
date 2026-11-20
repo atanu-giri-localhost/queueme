@@ -169,7 +169,7 @@ export default function NotepadView({ onOpenAuth }) {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <FileText className="w-5 h-5 text-indigo-400" />
-                <h1 className="font-bold text-base text-white tracking-tight">Notepad</h1>
+                <h1 className="font-bold text-base text-zinc-100 tracking-tight">Notepad</h1>
               </div>
               <Button
                 variant="primary"
@@ -198,7 +198,7 @@ export default function NotepadView({ onOpenAuth }) {
           {/* Unauthenticated Banner */}
           {!isAuthenticated && (
             <div className="p-3 mx-3 my-2 rounded-xl bg-indigo-950/30 border border-indigo-500/20 text-xs text-indigo-200 flex flex-col gap-1.5">
-              <span className="font-semibold text-white">Local Scratchpad Mode</span>
+              <span className="font-semibold text-zinc-100">Local Scratchpad Mode</span>
               <p className="text-[11px] text-zinc-400">
                 Sign in to back up and sync your notes to the cloud across devices.
               </p>

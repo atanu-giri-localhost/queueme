@@ -21,7 +21,7 @@ export default function CategoryBreakdown({
     <div className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-sm space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-bold text-white tracking-tight">Queue Distribution</h3>
+          <h3 className="text-sm font-bold text-zinc-100 tracking-tight">Queue Distribution</h3>
           <p className="text-xs text-zinc-400">Media split across your personal backlog</p>
         </div>
         <span className="text-xs font-mono text-zinc-400">6 Categories</span>
@@ -70,7 +70,7 @@ export default function CategoryBreakdown({
                 </div>
                 <span className="text-[11px] font-mono text-zinc-400">{pct}%</span>
               </div>
-              <div className="text-base font-bold text-white">{count}</div>
+              <div className="text-base font-bold text-zinc-100">{count}</div>
               <div className="text-xs text-zinc-400 truncate">{cfg.label}</div>
             </button>
           );

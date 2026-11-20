@@ -121,7 +121,7 @@ export default function Sidebar({
           />
           {!isCollapsed && (
             <div className="flex flex-col">
-              <span className="font-bold text-base tracking-tight text-white flex items-center gap-1.5">
+              <span className="font-bold text-base tracking-tight text-zinc-100 flex items-center gap-1.5">
                 QueueMe
                 <span className="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                   v1.0

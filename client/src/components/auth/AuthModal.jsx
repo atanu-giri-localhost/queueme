@@ -139,7 +139,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
           <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center p-2.5 shadow-inner">
             <img src={logoIcon} alt="QueueMe logo" className="w-full h-full object-contain" />
           </div>
-          <h2 id="auth-modal-title" className="text-xl font-bold text-white tracking-tight">
+          <h2 id="auth-modal-title" className="text-xl font-bold text-zinc-100 tracking-tight">
             {mode === 'register' ? 'Create your QueueMe account' : 'Welcome back to QueueMe'}
           </h2>
           <p className="text-xs text-zinc-400 max-w-xs">

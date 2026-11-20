@@ -379,7 +379,7 @@ export default function App() {
                       <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
                       <span>Backlog & Reading Hub</span>
                     </div>
-                    <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-100 tracking-tight">
                       {user?.name ? `Ready to dive in, ${user.name.split(' ')[0]}?` : 'Ready to dive in?'}
                     </h1>
                     <p className="text-sm text-zinc-400 max-w-xl leading-relaxed">
@@ -522,7 +522,7 @@ export default function App() {
               {/* Header Title & Breadcrumb */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <h1 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
+                  <h1 className="text-2xl font-extrabold text-zinc-100 tracking-tight flex items-center gap-2">
                     <span>Queue Backlog</span>
                     {selectedCategory !== 'all' && (
                       <span className="text-sm font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 capitalize">
@@ -600,7 +600,7 @@ export default function App() {
                     <FilterX className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-white">No items match your criteria</h3>
+                    <h3 className="text-base font-bold text-zinc-100">No items match your criteria</h3>
                     <p className="text-xs text-zinc-400 max-w-sm mx-auto mt-1">
                       Try resetting your search query or filters, or add a new item directly to your queue.
                     </p>

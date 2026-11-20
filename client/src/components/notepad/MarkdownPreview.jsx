@@ -43,19 +43,19 @@ export default function MarkdownPreview({ content }) {
     // Headings
     if (line.startsWith('### ')) {
       renderedElements.push(
-        <h3 key={i} className="text-base font-bold text-white mt-4 mb-1">
+        <h3 key={i} className="text-base font-bold text-zinc-100 mt-4 mb-1">
           {renderInline(line.slice(4))}
         </h3>
       );
     } else if (line.startsWith('## ')) {
       renderedElements.push(
-        <h2 key={i} className="text-lg font-bold text-white mt-5 mb-1.5 border-b border-zinc-800 pb-1">
+        <h2 key={i} className="text-lg font-bold text-zinc-100 mt-5 mb-1.5 border-b border-zinc-800 pb-1">
           {renderInline(line.slice(3))}
         </h2>
       );
     } else if (line.startsWith('# ')) {
       renderedElements.push(
-        <h1 key={i} className="text-xl font-extrabold text-white mt-6 mb-2">
+        <h1 key={i} className="text-xl font-extrabold text-zinc-100 mt-6 mb-2">
           {renderInline(line.slice(2))}
         </h1>
       );
@@ -135,7 +135,7 @@ function renderInline(text) {
     const matchedStr = match[0];
     if (matchedStr.startsWith('**') && matchedStr.endsWith('**')) {
       parts.push(
-        <strong key={key++} className="font-semibold text-white">
+        <strong key={key++} className="font-semibold text-zinc-100">
           {matchedStr.slice(2, -2)}
         </strong>
       );

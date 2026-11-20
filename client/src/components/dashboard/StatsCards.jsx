@@ -89,7 +89,7 @@ export default function StatsCards({
             </div>
 
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-extrabold text-white tracking-tight">
+              <span className="text-3xl font-extrabold text-zinc-100 tracking-tight">
                 {stat.value}
               </span>
               <span className="text-xs font-semibold text-zinc-400">{stat.suffix}</span>

@@ -199,7 +199,7 @@ export default function ItemDetailModal({
                   <AlertTriangle className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 id="delete-confirm-title" className="text-base font-bold text-white">
+                  <h3 id="delete-confirm-title" className="text-base font-bold text-zinc-100">
                     Delete item from backlog?
                   </h3>
                   <p className="text-xs text-zinc-400 mt-0.5">
@@ -209,7 +209,7 @@ export default function ItemDetailModal({
               </div>
 
               <p className="text-xs text-zinc-300 leading-relaxed bg-zinc-950/60 p-3.5 rounded-xl border border-zinc-800/80">
-                Are you sure you want to remove <span className="text-white font-semibold">&ldquo;{item.title}&rdquo;</span>? This will immediately remove it from your queue.
+                Are you sure you want to remove <span className="text-zinc-100 font-semibold">&ldquo;{item.title}&rdquo;</span>? This will immediately remove it from your queue.
               </p>
 
               <div className="flex items-center justify-end gap-2.5 pt-1">
@@ -290,7 +290,7 @@ export default function ItemDetailModal({
           {isEditing ? (
             <form onSubmit={handleSaveEdit} className="space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-zinc-800/80">
-                <div className="flex items-center gap-2 text-sm font-bold text-white">
+                <div className="flex items-center gap-2 text-sm font-bold text-zinc-100">
                   <Edit3 className="w-4 h-4 text-indigo-400" />
                   <span>Edit Item Details</span>
                 </div>
@@ -439,7 +439,7 @@ export default function ItemDetailModal({
                     </>
                   )}
                 </div>
-                <h2 id="detail-modal-title" className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                <h2 id="detail-modal-title" className="text-xl sm:text-2xl font-extrabold text-zinc-100 tracking-tight">
                   {item.title}
                 </h2>
               </div>

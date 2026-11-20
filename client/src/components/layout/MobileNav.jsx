@@ -8,10 +8,13 @@ import {
   LogOut,
   LogIn,
   FileText,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import TypeIcon from '../common/TypeIcon';
 import logoIcon from '../../assets/queueme-icon.svg';
 import useAuth from '../../hooks/useAuth';
+import useTheme from '../../hooks/useTheme';
 
 export default function MobileNav({
   isOpen,
@@ -26,6 +29,7 @@ export default function MobileNav({
   onOpenAuth,
 }) {
   const { user, isAuthenticated, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -68,19 +72,33 @@ export default function MobileNav({
               className="w-8 h-8 rounded-xl ring-1 ring-white/20 shrink-0 object-cover shadow-sm"
             />
             <div>
-              <h2 className="font-bold text-sm text-white">QueueMe</h2>
+              <h2 className="font-bold text-sm text-zinc-100">QueueMe</h2>
               <p className="text-[11px] text-zinc-500">Backlog & Watchlist</p>
             </div>
           </div>
-          <button
-            id="close-mobile-nav-btn"
-            type="button"
-            onClick={onClose}
-            aria-label="Close navigation"
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Switch to Ash Light Mode' : 'Switch to Mocha Dark Mode'}
+              className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors cursor-pointer"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-indigo-500" />
+              )}
+            </button>
+            <button
+              id="close-mobile-nav-btn"
+              type="button"
+              onClick={onClose}
+              aria-label="Close navigation"
+              className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Content Navigation */}

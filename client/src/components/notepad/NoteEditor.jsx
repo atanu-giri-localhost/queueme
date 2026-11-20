@@ -167,7 +167,7 @@ export default function NoteEditor({
           value={title}
           onChange={(e) => handleTitleChange(e.target.value)}
           placeholder="Note Title..."
-          className="flex-1 bg-transparent border-0 text-base sm:text-lg font-bold text-white placeholder-zinc-600 focus:outline-none focus:ring-0 truncate"
+          className="flex-1 bg-transparent border-0 text-base sm:text-lg font-bold text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-0 truncate"
         />
 
         {/* Header Right Actions */}
@@ -326,7 +326,7 @@ export default function NoteEditor({
             type="button"
             onClick={() => setPreviewMode(false)}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
-              !previewMode ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
+              !previewMode ? 'bg-zinc-800 text-zinc-100 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <Edit3 className="w-3.5 h-3.5" />
@@ -336,7 +336,7 @@ export default function NoteEditor({
             type="button"
             onClick={() => setPreviewMode(true)}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
-              previewMode ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
+              previewMode ? 'bg-zinc-800 text-zinc-100 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <Eye className="w-3.5 h-3.5" />
@@ -348,8 +348,8 @@ export default function NoteEditor({
       {/* Editor Canvas */}
       <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
         {previewMode ? (
-          <div className="max-w-3xl mx-auto prose prose-invert">
-            <h1 className="text-2xl font-bold text-white mb-4 border-b border-zinc-800 pb-2">
+          <div className="max-w-3xl mx-auto prose dark:prose-invert">
+            <h1 className="text-2xl font-bold text-zinc-100 mb-4 border-b border-zinc-800 pb-2">
               {title || 'Untitled Note'}
             </h1>
             <MarkdownPreview content={content} />

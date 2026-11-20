@@ -9,6 +9,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+      (function() {
+        try {
+          var theme = localStorage.getItem('queueme_theme') || 'dark';
+          if (theme === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+          } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
   <body class="bg-zinc-950 text-zinc-100 antialiased selection:bg-indigo-500/30 selection:text-indigo-200">

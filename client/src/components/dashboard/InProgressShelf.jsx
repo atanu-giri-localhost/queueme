@@ -21,7 +21,7 @@ export default function InProgressShelf({
             <Flame className="w-4 h-4 animate-pulse" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white tracking-tight">
+            <h3 className="text-base font-bold text-zinc-100 tracking-tight">
               Continue Consuming
             </h3>
             <p className="text-xs text-zinc-400">

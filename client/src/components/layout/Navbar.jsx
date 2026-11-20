@@ -7,10 +7,13 @@ import {
   List,
   Keyboard,
   FileText,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import Button from '../common/Button';
 import logoIcon from '../../assets/queueme-icon.svg';
 import useAuth from '../../hooks/useAuth';
+import useTheme from '../../hooks/useTheme';
 
 export default function Navbar({
   onOpenMobileNav,
@@ -26,6 +29,7 @@ export default function Navbar({
   counts,
 }) {
   const { isAuthenticated } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   // Support "/" key to quickly focus the search input
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -67,7 +71,7 @@ export default function Navbar({
             alt="QueueMe Logo"
             className="w-7 h-7 rounded-lg object-cover shadow-sm ring-1 ring-white/10 shrink-0"
           />
-          <span className="font-bold text-base text-white tracking-tight">QueueMe</span>
+          <span className="font-bold text-base text-zinc-100 tracking-tight">QueueMe</span>
         </div>
 
         {/* Desktop View Breadcrumb */}
@@ -167,6 +171,22 @@ export default function Navbar({
         >
           <span>Notepad</span>
         </Button>
+
+        {/* Theme Toggle Button (Mocha Dark / Ash Light) */}
+        <button
+          id="navbar-theme-toggle-btn"
+          type="button"
+          onClick={toggleTheme}
+          title={theme === 'dark' ? 'Switch to Cool Ash Light Mode' : 'Switch to Warm Mocha Dark Mode'}
+          aria-label={theme === 'dark' ? 'Switch to Cool Ash Light Mode' : 'Switch to Warm Mocha Dark Mode'}
+          className="p-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 border border-zinc-700/40 hover:border-zinc-600/60 transition-colors cursor-pointer"
+        >
+          {theme === 'dark' ? (
+            <Sun className="w-4 h-4 text-amber-400 transition-transform hover:rotate-45" />
+          ) : (
+            <Moon className="w-4 h-4 text-indigo-500 transition-transform hover:-rotate-12" />
+          )}
+        </button>
 
         {/* Sign In & Sign Up buttons for unauthenticated users */}
         {!isAuthenticated && (

@@ -171,7 +171,7 @@ export default function AddItemModal({
               <Plus className="w-5 h-5" />
             </div>
             <div>
-              <h2 id="add-modal-title" className="text-lg font-bold text-white tracking-tight">Add to Queue</h2>
+              <h2 id="add-modal-title" className="text-lg font-bold text-zinc-100 tracking-tight">Add to Queue</h2>
               <p className="text-xs text-zinc-400">Save a new movie, video, article, book, course, or audio</p>
             </div>
           </div>
